@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Laboratorio Cognitivo: 7±2 y Chunking</title>
+  <meta name="description" content="App interactiva para experimentar con el número mágico 7±2 y el concepto de chunking (agrupamiento). Pensada para estudiantes de Pedagogía.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0f172a;      /* slate-900 */
+      --panel:#111827;     /* gray-900 */
+      --muted:#94a3b8;     /* slate-400 */
+      --text:#e5e7eb;      /* gray-200 */
+      --brand:#22d3ee;     /* cyan-400 */
+      --brand-2:#38bdf8;   /* sky-400 */
+      --ok:#22c55e;      /* green-500 */
+      --warn:#f59e0b;      /* amber-500 */
+      --bad:#ef4444;      /* red-500 */
+      --card:#0b1222;      /* custom */
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 20px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial; 
+      background: radial-gradient(1200px 700px at 10% 0%, #0b1222 0%, var(--bg) 50%), var(--bg);
+      color:var(--text);
+      line-height:1.5;
+    }
+    a{color:var(--brand)}
+    header{
+      position:sticky; top:0; z-index:50;
+      /* SIMPLIFICADO: Fondo sólido semi-transparente, sin blur */
+      background:rgba(15,23,42,.85);
+      border-bottom:1px solid rgba(148,163,184,.15);
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:16px 20px}
+    .title{display:flex; align-items:center}
+    /* SIMPLIFICADO: Eliminado .logo y gap */
+    h1{font-size:20px; margin:0; letter-spacing:.2px}
+    nav{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .tab{border:1px solid rgba(148,163,184,.2); padding:8px 12px; border-radius:999px; color:var(--muted); cursor:pointer; user-select:none}
+    .tab.active{background:linear-gradient(135deg, rgba(34,211,238,.16), rgba(56,189,248,.12)); color:#e6f9ff; border-color:transparent}
+
+    main{padding:26px 20px}
+    .grid{display:grid; gap:18px}
+    @media(min-width:900px){
+      .grid{grid-template-columns: 1.4fr .9fr}
+    }
+    .card{
+      /* SIMPLIFICADO: Fondo sólido, sin gradiente */
+      background: var(--card);
+      border:1px solid rgba(148,163,184,.2); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px
+    }
+    .card h2{margin:6px 0 12px; font-size:22px}
+    .muted{color:var(--muted)}
+    .kpi{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px}
+    
+    /* SIMPLIFICADO: KPI boxes más minimalistas */
+    .kpi .box{
+      text-align:center;
+    }
+    .box b{font-size:20px; display:block; line-height:1.2; margin-top: 4px;}
+
+    .controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    select, input[type="text"], input[type="number"], button, textarea{
+      background:#0b1222; color:var(--text); border:1px solid rgba(148,163,184,.25); border-radius:12px; padding:10px 12px; outline:none;
+    }
+    textarea{width:100%; min-height:72px}
+    button{cursor:pointer; transition:transform .02s ease}
+    button.primary{background:linear-gradient(135deg,var(--brand),var(--brand-2)); color:#05222b; font-weight:700; border:none}
+    button:active{transform:scale(.98)}
+    
+    .sequence{
+      font-variant-numeric:tabular-nums; letter-spacing:2px; font-size:28px; text-align:center; padding:24px; border-radius:14px; background:#0b1222;
+      /* SIMPLIFICADO: Borde sólido */
+      border:1px solid rgba(148,163,184,.25);
+    }
+    .hint{font-size:13px; color:var(--muted)}
+    .success{color:var(--ok)}
+    .error{color:var(--bad)}
+
+    .footer{margin-top:30px; opacity:.9}
+    .pill{display:inline-block; padding:6px 10px; border-radius:999px; background:rgba(34,211,238,.12); color:#bff6ff; border:1px solid rgba(34,211,238,.25); font-size:12px}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    .flex{display:flex; gap:10px; align-items:center}
+    .center{text-align:center}
+    .mb8{margin-bottom:8px}
+    .mb12{margin-bottom:12px}
+    .mb16{margin-bottom:16px}
+    .mb20{margin-bottom:20px}
+    .mt8{margin-top:8px}
+    .mt16{margin-top:16px}
+    .mt24{margin-top:24px}
+    .w100{width:100%}
+    .right{text-align:right}
+    .hidden{display:none}
+    .small{font-size:12px}
+
+    .badge{font-size:11px; padding:4px 8px; border-radius:999px; border:1px solid rgba(148,163,184,.25); color:var(--muted)}
+    .list{line-height:1.7}
+
+    canvas{width:100%; height:280px; background:#0b1222; border-radius:14px; border:1px solid rgba(148,163,184,.18)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="title">
+        <h1>Laboratorio Cognitivo — <span class="muted">7±2 & Chunking</span></h1>
+      </div>
+      <nav aria-label="Secciones">
+        <button class="tab active" data-tab="intro">Inicio</button>
+        <button class="tab" data-tab="span">Número mágico 7±2</button>
+        <button class="tab" data-tab="chunk">Chunking</button>
+        <button class="tab" data-tab="result">Resultados</button>
+        <button class="tab" data-tab="about">Acerca de</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="intro" class="grid">
+      <div class="card">
+        <h2>Bienvenidos 👋</h2>
+        <p>Esta mini-app te permite <b>experimentar</b> dos ideas de George A. Miller que cambiaron la pedagogía:
+          <span class="pill">Capacidad de la memoria a corto plazo (7 ± 2)</span> y <span class="pill">Chunking o agrupamiento</span>.
+        </p>
+        <ul class="list">
+          <li>Primero, mide tu <b>span de memoria</b> recordando secuencias breves.</li>
+          <li>Luego, comprueba cómo el <b>agrupamiento</b> mejora el recuerdo.</li>
+          <li>Por último, explora los <b>resultados</b> y reflexiona en clase.</li>
+        </ul>
+        <p class="hint">Sugerencia: usa auriculares o un lugar tranquilo. Nada se envía a servidores; los datos se guardan solo en tu navegador.</p>
+        <div class="mt16">
+          <button class="primary" data-go="span">Empezar: 7±2</button>
+          <button data-go="chunk">Ir a Chunking</button>
+        </div>
+      </div>
+      <aside class="card">
+        <h2>Objetivos de aprendizaje</h2>
+        <div class="kpi">
+          <div class="box"><div class="muted">Comprender</div><b>El límite del span</b></div>
+          <div class="box"><div class="muted">Aplicar</div><b>Chunking eficaz</b></div>
+          <div class="box"><div class="muted">Reflexionar</div><b>Implicaciones didácticas</b></div>
+        </div>
+        <p class="mt16 muted">Resultado esperado: reconocer que la presentación 
+          <i>segmentada y con significado</i> facilita el aprendizaje.</p>
+      </aside>
+    </section>
+
+    <section id="span" class="grid hidden" aria-labelledby="h-span">
+      <div class="card">
+        <h2 id="h-span">Experimento: Número mágico 7 ± 2</h2>
+        <p class="muted">Procedimiento: verás una secuencia breve (se oculta tras unos segundos). Escríbela <b>en el orden exacto</b>. La longitud se ajusta automáticamente para estimar tu <b>span</b>.</p>
+        <div class="controls mt16">
+          <label class="small">Tipo de estímulo
+            <select id="stimulus">
+              <option value="digits">Dígitos (0–9)</option>
+              <option value="letters">Letras (A–Z)</option>
+              <option value="words">Palabras cortas</option>
+              <option value="syll">Sílabas</option>
+            </select>
+          </label>
+          <label class="small">Velocidad de presentación
+            <select id="speed">
+              <option value="900">Lenta (900ms/ítem)</option>
+              <option value="700" selected>Media (700ms/ítem)</option>
+              <option value="500">Rápida (500ms/ítem)</option>
+            </select>
+          </label>
+          <label class="small">Intentos
+            <input id="trials" type="number" min="6" max="16" value="10" />
+          </label>
+          <button id="startSpan" class="primary">Iniciar</button>
+          <button id="resetSpan" class="" title="Borrar datos de esta sesión">Reiniciar</button>
+        </div>
+
+        <div id="spanStage" class="mt16 hidden">
+          <div id="sequence" class="sequence" aria-live="polite">—</div>
+          <div class="mt8">
+            <label class="sr-only" for="response">Tu respuesta</label>
+            <input id="response" type="text" autocomplete="off" class="w100" placeholder="Escribe la secuencia exacta y pulsa Enter" />
+          </div>
+          <div class="mt8 right small muted"><span id="progress">0</span>/<span id="total">0</span> intentos</div>
+          <div id="feedback" class="mt8 small"></div>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h2>Notas didácticas</h2>
+        <ul class="list">
+          <li>El span suele estar entre <b>5 y 9</b> ítems en tareas sencillas.</li>
+          <li>Una <b>presentación más rápida</b> o ítems <b>menos familiares</b> reducen el rendimiento.</li>
+          <li>El <b>conocimiento previo</b> permite codificar mejor (pista para el siguiente módulo).</li>
+        </ul>
+        <div class="mt16">
+          <span class="badge">Consejo</span>
+          <p class="muted small">Si eres docente, pide al alumnado que compare su resultado con diferentes tipos de estímulos y discuta por qué cambia.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="chunk" class="grid hidden" aria-labelledby="h-chunk">
+      <div class="card">
+        <h2 id="h-chunk">Experimento: Chunking (agrupamiento)</h2>
+        <p class="muted">Compararás tu recuerdo de la <b>misma información</b> sin estructura vs. agrupada en <i>chunks</i> significativos.</p>
+
+        <div class="controls mt12">
+          <label class="small">Escenario
+            <select id="chunkScenario">
+              <option value="letters" selected>Letras sin sentido vs. Siglas conocidas</option>
+              <option value="phone">Número largo vs. Número con guiones</option>
+              <option value="custom">Texto personalizado</option>
+            </select>
+          </label>
+          <button id="startChunk" class="primary">Iniciar comparación</button>
+        </div>
+
+        <div id="chunkStage" class="mt16 hidden">
+          <div class="sequence" id="chunkDisplay">—</div>
+          <div class="mt8">
+            <input id="chunkResponse" type="text" class="w100" placeholder="Escribe exactamente lo que recuerdas y pulsa Enter" />
+          </div>
+          <div class="mt8 right small muted">Ensayo <span id="chunkTrial">1</span>/2</div>
+          <div id="chunkFeedback" class="mt8 small"></div>
+        </div>
+
+        <details class="mt16">
+          <summary class="muted">Configurar texto personalizado</summary>
+          <div class="mt8">
+            <label class="small">Texto sin agrupar
+              <input id="customRaw" class="w100" type="text" value="IBMSONYFBICNNUNESCO" />
+            </label>
+            <label class="small mt8">Texto agrupado (usa espacios o - para separar)
+              <input id="customGrouped" class="w100" type="text" value="IBM SONY FBI CNN UNESCO" />
+            </label>
+          </div>
+        </details>
+      </div>
+
+      <aside class="card">
+        <h2>¿Qué observar?</h2>
+        <ul class="list">
+          <li>Con <b>chunks significativos</b>, suele mejorar la <b>precisión</b> y/o disminuir el <b>tiempo</b>.</li>
+          <li>El efecto depende del <b>conocimiento previo</b>: siglas conocidas > desconocidas.</li>
+          <li>Invita a crear <b>estrategias de agrupación</b> para tu materia (fechas, fórmulas, etapas…)</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section id="result" class="grid hidden" aria-labelledby="h-result">
+      <div class="card">
+        <h2 id="h-result">Panel de resultados</h2>
+        <div class="kpi mb12">
+          <div class="box"><div class="muted">Estimación de span</div><b id="kpiSpan">—</b></div>
+          <div class="box"><div class="muted">Precisión (7±2)</div><b id="kpiAcc">—</b></div>
+          <div class="box"><div class="muted">Ventaja por chunking</div><b id="kpiChunk">—</b></div>
+        </div>
+        <canvas id="chart"></canvas>
+        <div class="mt16 controls">
+          <button id="exportCSV">Exportar CSV</button>
+          <button id="clearAll" title="Borrar todo lo guardado">Borrar datos</button>
+        </div>
+      </div>
+      <aside class="card">
+        <h2>Interpretación</h2>
+        <p class="muted small">El <b>span</b> se calcula como la media de las últimas reversiones de longitud y del máximo alcanzado. La <b>ventaja por chunking</b> combina precisión y tiempo entre ensayo sin estructura vs. agrupado.</p>
+        <p class="muted small">Usa estos datos para discutir <i>diseño instruccional</i>: tamaño de bloques, andamiaje, activación de conocimientos previos y uso de organizadores.</p>
+      </aside>
+    </section>
+
+    <section id="about" class="grid hidden" aria-labelledby="h-about">
+      <div class="card">
+        <h2 id="h-about">Acerca de esta app</h2>
+        <p>Inspirada en los trabajos de George A. Miller (1956). Esta herramienta es solo con HTML, CSS y JS (sin backend), lista para <b>GitHub Pages</b>.</p>
+        <ul class="list">
+          <li>Privacidad: datos en <code>localStorage</code> del navegador.</li>
+          <li>Accesibilidad: navegación por teclado; mensajes con <code>aria-live</code>.</li>
+          <li>Licencia: MIT. Puedes editar libremente para tu docencia.</li>
+        </ul>
+        <p class="small muted">Sugerencias: abre issues en tu repositorio o añade rúbricas de reflexión con tu LMS.</p>
+      </div>
+      <aside class="card">
+        <h2>Créditos</h2>
+        <p class="muted small">Diseño y código educativo; referencias clásicas de memoria a corto plazo y chunking. Ajusta los parámetros si deseas replicar variantes (p.ej., presentación auditiva).</p>
+      </aside>
+    </section>
+
+    <footer class="wrap footer muted small">Hecho con ❤️ para clases de Pedagogía. – MIT</footer>
+  </main>
+
+  <script>
+    (function(){
+      const $ = sel => document.querySelector(sel);
+      const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+      // Simple estado en memoria + persistencia
+      const state = {
+        span: { trials: [], estimate: null },
+        chunk: { raw:null, grouped:null, results: [] }
+      };
+      const storeKey = 'labcog-miller-7-2-chunking-v1';
+      try { const saved = JSON.parse(localStorage.getItem(storeKey)); if(saved){ Object.assign(state, saved); } } catch(e){}
+      const persist = () => localStorage.setItem(storeKey, JSON.stringify(state));
+
+      // Navegación por pestañas
+      function show(tab){
+        $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+        ['intro','span','chunk','result','about'].forEach(id=>{
+          const el = document.getElementById(id);
+          if(el) el.classList.toggle('hidden', id!==tab);
+        });
+        if(tab==='result') drawChart();
+      }
+      $$('.tab').forEach(t=>t.addEventListener('click', ()=>show(t.dataset.tab)));
+      $$('#intro [data-go]').forEach(b=>b.addEventListener('click', ()=>show(b.dataset.go)));
+
+      // ------------------------- 7±2 -------------------------
+      const seqEl = $('#sequence');
+      const respEl = $('#response');
+      const startBtn = $('#startSpan');
+      const resetBtn = $('#resetSpan');
+      const progressEl = $('#progress');
+      const totalEl = $('#total');
+      const feedbackEl = $('#feedback');
+
+      let controller = {
+        running:false,
+        index:0,
+        total:10,
+        len:5,
+        reversals:[],
+        lastDir:null,
+        currentSeq:'',
+        type:'digits',
+        speed:700,
+        timer: null // Para manejar el intervalo
+      };
+
+      function randFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+      function genItem(type){
+        if(type==='digits') return String(Math.floor(Math.random()*10));
+        if(type==='letters') return String.fromCharCode(65 + Math.floor(Math.random()*26));
+        if(type==='words'){
+          const pool = ['sol','mar','pan','luz','voz','red','sal','té','gas','pie','vez','fin','flor','casa','lago','tren','vino','cima','foto','lago'];
+          return randFrom(pool);
+        }
+        if(type==='syll'){
+          const pool = ['pa','ta','ka','ma','la','ra','sa','na','fa','ba','da','ga'];
+          return randFrom(pool);
+        }
+        return '?';
+      }
+      function makeSequence(type,len){
+        const items=[]; 
+        while(items.length<len){ items.push(genItem(type)); }
+        // Para palabras/sílabas, separar por espacio; para letras/dígitos, sin espacios
+        if(type==='digits' || type==='letters') return items.join('');
+        return items.join(' ');
+      }
+
+      // --- BUG 1 CORREGIDO: Presentación serial (uno por uno) ---
+      function presentSequence(seq, speed){
+        if (controller.timer) clearInterval(controller.timer);
+        
+        const parts = (controller.type==='digits'||controller.type==='letters') ? seq.split('') : seq.split(' ');
+        let i=0;
+        seqEl.textContent = '·'; // Señal de preparación
+
+        controller.timer = setInterval(() => {
+          if (i < parts.length) {
+            seqEl.textContent = parts[i]; // Mostrar ítem actual
+            i++;
+          } else {
+            clearInterval(controller.timer); // Detener el intervalo
+            controller.timer = null;
+            // Esperar 'speed' ms después del *último* ítem antes de ocultar
+            setTimeout(() => {
+              seqEl.textContent = '⌛ Ahora escribe lo que recuerdas…';
+              respEl.value = '';
+              respEl.focus();
+            }, speed); 
+          }
+        }, speed); // Tiempo por ítem
+      }
+
+      function updateKpis(){
+        const acc = state.span.trials.length? (state.span.trials.filter(t=>t.correct).length/state.span.trials.length*100).toFixed(0)+'%':'—';
+        $('#kpiAcc').textContent = acc;
+        $('#kpiSpan').textContent = state.span.estimate? state.span.estimate.toFixed(1)+' ítems':'—';
+        const ch = state.chunk.results.length? computeChunkAdvantage(state.chunk.results):null;
+        $('#kpiChunk').textContent = ch? (ch>0?'+':'')+ (ch*100).toFixed(0)+'%':'—';
+      }
+
+      function estimateSpan(){
+        // Estimación basada en máximo correcto y media de reversiones (si hay ≥2)
+        const correctLens = state.span.trials.filter(t=>t.correct).map(t=>t.length);
+        const maxCorrect = correctLens.length? Math.max(...correctLens) : 0;
+        const revs = controller.reversals.slice(-3); // últimas hasta 3 reversiones
+        const revAvg = revs.length? revs.reduce((a,b)=>a+b,0)/revs.length : 0;
+        const est = Math.max(maxCorrect, revAvg);
+        state.span.estimate = est || null;
+      }
+
+      function startSpan(){
+        if (controller.timer) clearInterval(controller.timer);
+        controller = { running:true, index:0, total: parseInt($('#trials').value||'10',10), len:5, reversals:[], lastDir:null, currentSeq:'', type:$('#stimulus').value, speed:parseInt($('#speed').value,10), timer: null };
+        state.span.trials = [];
+        persist();
+        totalEl.textContent = controller.total; progressEl.textContent = '0';
+        $('#spanStage').classList.remove('hidden');
+        nextTrial();
+      }
+      function nextTrial(){
+        if(controller.index>=controller.total){
+          feedbackEl.innerHTML = '<span class="success">Sesión terminada.</span> Revisa tus resultados.';
+          estimateSpan(); persist(); updateKpis();
+          controller.running = false;
+          return;
+        }
+        controller.currentSeq = makeSequence(controller.type, controller.len);
+        seqEl.textContent = 'Preparados…';
+        respEl.value=''; feedbackEl.textContent='';
+        setTimeout(()=>presentSequence(controller.currentSeq, controller.speed), 700);
+        controller.index++; progressEl.textContent = String(controller.index);
+      }
+
+      respEl.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' && controller.running){
+          // No procesar si la secuencia aún se está mostrando
+          if (controller.timer) return; 
+          
+          const given = respEl.value.trim();
+          const target = controller.currentSeq;
+          // Usar normalize para la corrección (ignora espacios/guiones)
+          const correct = normalize(given) === normalize(target);
+          
+          const t = { length: controller.len, type: controller.type, correct, given, target, ts: Date.now() };
+          state.span.trials.push(t);
+          // Adaptativo: si acierta, +1; si falla, -1 (mín 3)
+          const dir = correct? +1 : -1;
+          if(controller.lastDir!==null && dir!==controller.lastDir){ controller.reversals.push(controller.len); }
+          controller.lastDir = dir;
+          controller.len = Math.max(3, controller.len + dir);
+          persist();
+          feedbackEl.innerHTML = correct? '<span class="success">¡Correcto!</span>' : `<span class="error">Incorrecto.</span> <span class="small">Objetivo: <code>${escapeHtml(target)}</code></span>`;
+          setTimeout(nextTrial, 600);
+        }
+      });
+
+      function resetSpan(){
+        if (controller.timer) clearInterval(controller.timer);
+        controller.running=false; state.span.trials=[]; state.span.estimate=null; controller.reversals=[]; persist();
+        seqEl.textContent='—'; feedbackEl.textContent=''; progressEl.textContent='0'; totalEl.textContent='0'; respEl.value='';
+        $('#spanStage').classList.add('hidden'); updateKpis();
+      }
+
+      startBtn.addEventListener('click', startSpan);
+      resetBtn.addEventListener('click', resetSpan);
+
+      // ------------------------- CHUNKING -------------------------
+      const chunkDisplay = $('#chunkDisplay');
+      const chunkResp = $('#chunkResponse');
+      const startChunkBtn = $('#startChunk');
+      const chunkTrialEl = $('#chunkTrial');
+      const chunkFeedback = $('#chunkFeedback');
+
+      let chunkCtrl = { phase:0, start:0, scenario:'letters', pair:null };
+
+      function getScenarioPair(){
+        const sc = $('#chunkScenario').value;
+        if(sc==='letters'){
+          return { raw: 'IBMSONYFBICNNUNESCO', grouped: 'IBM SONY FBI CNN UNESCO' };
+        } else if(sc==='phone'){
+          // Ejemplo con guiones
+          return { raw: '912345678901', grouped: '91-234-567-890-1' };
+        } else {
+          const raw = $('#customRaw').value || 'IBMSONYFBICNNUNESCO';
+          const grouped = $('#customGrouped').value || 'IBM SONY FBI CNN UNESCO';
+          return { raw, grouped };
+        }
+      }
+
+      function startChunk(){
+        chunkCtrl = { phase:0, start:0, scenario: $('#chunkScenario').value, pair: getScenarioPair() };
+        $('#chunkStage').classList.remove('hidden');
+        chunkFeedback.textContent='';
+        chunkTrialEl.textContent = '1';
+        presentChunk(chunkCtrl.pair.raw);
+      }
+
+      function presentChunk(text){
+        chunkResp.value=''; chunkResp.blur();
+        chunkDisplay.textContent = text;
+        setTimeout(()=>{ chunkDisplay.textContent='⌛ Ahora escribe lo que recuerdas…'; chunkResp.value=''; chunkResp.focus(); chunkCtrl.start=performance.now(); }, 2200);
+      }
+
+      // --- BUG 2 CORREGIDO: Lógica de validación de Chunking ---
+      function endChunkTrial(given){
+        // Obtener el string objetivo (crudo o agrupado)
+        const targetStr = chunkCtrl.phase===0 ? chunkCtrl.pair.raw : chunkCtrl.pair.grouped;
+        
+        // Usar normalize() para ambas comparaciones (ignora espacios, guiones y mayúsculas)
+        const ok = normalize(given) === normalize(targetStr);
+        const rt = (performance.now()-chunkCtrl.start)/1000;
+        
+        state.chunk.results.push({ 
+            scenario: chunkCtrl.scenario, 
+            phase: chunkCtrl.phase, 
+            ok, 
+            rt, 
+            target: targetStr, // Guardar el string original
+            given 
+        });
+        persist();
+        
+        if(chunkCtrl.phase===0){
+          chunkCtrl.phase=1; chunkTrialEl.textContent='2';
+          chunkFeedback.innerHTML = ok? '<span class="success">Bien.</span> Ahora prueba con la versión <b>agrupada</b>.' : '<span class="error">Fallo.</span> Ahora intenta la versión <b>agrupada</b>.';
+          setTimeout(()=>presentChunk(chunkCtrl.pair.grouped), 700);
+        } else {
+          chunkFeedback.innerHTML = ok? '<span class="success">Ensayo completado.</span> Revisa Resultados.' : '<span class="warn">Completado.</span> Revisa Resultados.';
+          updateKpis();
+        }
+      }
+
+      chunkResp.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' && !$('#chunkStage').classList.contains('hidden')){
+          const given = chunkResp.value.trim();
+          if(!given) return;
+          endChunkTrial(given);
+        }
+      });
+
+      startChunkBtn.addEventListener('click', startChunk);
+
+      function computeChunkAdvantage(arr){
+        // Devuelve proporción de mejora (menor tiempo + mayor precisión) de fase 1 (agrupado) vs 0 (crudo) para el último escenario
+        const last = arr.slice(-2);
+        if(last.length<2) return null;
+        const [raw, grouped] = last[0].phase===0 ? last : [last[1], last[0]];
+        const accRaw = raw.ok?1:0, accGrp = grouped.ok?1:0;
+        const timeRaw = raw.rt, timeGrp = grouped.rt;
+        const accGain = (accGrp - accRaw); // -1..+1
+        const timeGain = (timeRaw - timeGrp)/Math.max(timeRaw, timeGrp, 0.01); // proporción de ahorro
+        return (0.6*timeGain + 0.4*accGain); // ponderación: tiempo 60%, precisión 40%
+      }
+
+      // ------------------------- RESULTADOS -------------------------
+      const chartEl = $('#chart');
+      let chartCtx = null;
+      
+      // --- SIMPLIFICADO: Gráfico enfocado solo en 7±2 ---
+      function drawChart(){
+        const ctx = chartEl.getContext('2d');
+        ctx.clearRect(0,0,chartEl.width,chartEl.height);
+        const w = chartEl.clientWidth, h = chartEl.clientHeight;
+        
+        // Fondo
+        ctx.fillStyle = '#0b1222'; ctx.fillRect(0,0,w,h);
+        
+        // Ejes utilitarios
+        const pad = 40;
+        ctx.strokeStyle = 'rgba(148,163,184,.35)'; ctx.lineWidth=1;
+        ctx.beginPath(); ctx.moveTo(pad,h-pad); ctx.lineTo(w-pad,h-pad); ctx.moveTo(pad,pad); ctx.lineTo(pad,h-pad); ctx.stroke();
+        ctx.fillStyle = 'rgba(148,163,184,.9)'; ctx.font = '12px Inter';
+        ctx.fillText('Aciertos por longitud (Experimento 7±2)', pad, pad-10);
+        ctx.fillText('100%', 5, pad + 5);
+        ctx.fillText('0%', 15, h - pad);
+
+        const trials = state.span.trials;
+        if(trials.length){
+          const groups = {};
+          trials.forEach(t=>{ groups[t.length] = groups[t.length]||{n:0, ok:0}; groups[t.length].n++; if(t.correct) groups[t.length].ok++; });
+          const lengths = Object.keys(groups).map(n=>+n).sort((a,b)=>a-b);
+          
+          if (lengths.length > 0) {
+            const minL = Math.min(...lengths);
+            const maxL = Math.max(...lengths);
+            const numBars = (maxL - minL) + 1;
+            const xStep = (w - 2 * pad) / Math.max(numBars, 1);
+
+            for (let i = 0; i <= numBars; i++) {
+                const L = minL + i;
+                const group = groups[L];
+                const x = pad + i * xStep + xStep * 0.15;
+                const barW = xStep * 0.7;
+                
+                if (group) {
+                    const acc = group.ok / group.n;
+                    const barH = acc * (h - 2 * pad);
+                    ctx.fillStyle = 'rgba(56,189,248,.8)';
+                    ctx.fillRect(x, h - pad - barH, barW, barH);
+                }
+                
+                ctx.fillStyle = 'rgba(148,163,184,.9)';
+                ctx.textAlign = 'center';
+                ctx.fillText(String(L), x + barW / 2, h - pad + 16);
+            }
+          }
+        }
+        updateKpis();
+      }
+
+      function exportCSV(){
+        const rows = [];
+        rows.push(['bloque','ts','tipo','longitud','correcto','objetivo','respuesta','rt_s','escenario','fase']);
+        state.span.trials.forEach(t=>{
+          rows.push(['span', new Date(t.ts).toISOString(), t.type, t.length, t.correct?'1':'0', t.target, t.given, '', '', '']);
+        });
+        state.chunk.results.forEach(c=>{
+          rows.push(['chunk', new Date().toISOString(), '', '', c.ok?'1':'0', c.target, c.given, c.rt.toFixed(3), c.scenario, String(c.phase)]);
+        });
+        const csv = rows.map(r=>r.map(x=>`"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+        download('resultados_7-2_chunking.csv', csv, 'text/csv');
+      }
+
+      function clearAll(){
+        if(confirm('¿Seguro que deseas borrar todos los datos guardados?')){
+          localStorage.removeItem(storeKey);
+          state.span={trials:[], estimate:null}; state.chunk={raw:null, grouped:null, results:[]};
+          updateKpis(); drawChart();
+        }
+      }
+
+      $('#exportCSV').addEventListener('click', exportCSV);
+      $('#clearAll').addEventListener('click', clearAll);
+
+      // Utilidades
+      
+      // --- BUG 2 CORREGIDO: Normalize ahora incluye guiones ---
+      function normalize(s){ return s.replace(/[\s-]+/g,'').toUpperCase(); }
+      
+      function download(filename, data, type){
+        const blob = new Blob([data], {type});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+      }
+      function escapeHtml(str){ return str.replace(/[&<>'"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[c])); }
+
+      // Init
+      updateKpis();
+      drawChart();
+      // Accesos rápidos
+      document.addEventListener('keydown', (e)=>{
+        if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if(e.key==='1') show('span');
+        if(e.key==='2') show('chunk');
+        if(e.key==='3') show('result');
+        if(e.key==='0') show('intro');
+      });
+    })();
+  </script>
+</body>
+</html>
