@@ -32,6 +32,7 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
+    .muted { color: var(--muted); }
     
     .wrap {
       max-width: 800px;
@@ -158,183 +159,153 @@
     button:hover {
       border-color: #ced4da;
     }
-    button:active {
-      transform: scale(0.98);
-    }
     button.primary {
       background: var(--brand);
       color: #fff;
       border-color: var(--brand);
     }
     button.primary:hover {
-      border-color: #0056b3;
-      background: #0056b3;
+      filter: brightness(1.05);
     }
     .w100 { width: 100%; }
-
-    /* --- Elementos de la App --- */
+    details summary {
+      font-weight: 600;
+    }
+    
+    /* --- Etapas del experimento --- */
     .stage {
       margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+      padding: 1.5rem;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      background: #fafbff;
+      position: relative;
     }
-    
-    /* 1. Cuenta atrás (dibujo) */
     .countdown-timer {
       display: flex;
-      gap: 1rem;
+      gap: 0.5rem;
       justify-content: center;
-      align-items: center;
-      height: 100px;
-    }
-    .countdown-timer span {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--border);
-      opacity: 0;
-      animation: countdown-dot 1.2s ease-in-out both;
-    }
-    .countdown-timer.animate span:nth-child(1) { animation-delay: 0s; }
-    .countdown-timer.animate span:nth-child(2) { animation-delay: 1.2s; }
-    .countdown-timer.animate span:nth-child(3) { animation-delay: 2.4s; }
-    
-    @keyframes countdown-dot {
-      0%, 100% { opacity: 0; transform: scale(0.8); }
-      30%, 70% { opacity: 1; transform: scale(1); }
-    }
-
-    /* 2. Display de Secuencia */
-    .sequence {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-align: center;
-      padding: 1.5rem;
-      border-radius: var(--radius);
-      background: var(--bg);
-      border: 1px solid var(--border);
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-variant-numeric: tabular-nums;
-    }
-    
-    /* 3. Feedback */
-    .progress {
-      text-align: right;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin: 0.5rem 0;
-    }
-    .feedback {
-      font-size: 0.9rem;
-      min-height: 1.5em;
-      margin-top: 0.5rem;
-    }
-    .feedback .success { color: var(--ok); font-weight: 600; }
-    .feedback .warning { color: var(--warn); font-weight: 600; }
-    .feedback .error { color: var(--bad); font-weight: 600; }
-    .feedback .detail {
-      color: var(--muted);
-      font-family: monospace;
-      font-size: 0.85rem;
-    }
-    
-    /* --- NUEVO: Log de Feedback --- */
-    .feedback-log {
-      max-height: 120px;
-      overflow-y: auto;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.5rem 0.75rem;
-      margin-top: 1rem;
-      font-size: 0.85rem;
-    }
-    .feedback-log > div {
-      display: flex;
-      gap: 0.75rem;
-      font-family: monospace;
-      border-bottom: 1px dashed var(--border);
-      padding: 0.25rem 0;
-      align-items: center;
-    }
-    .feedback-log > div:last-child { border-bottom: none; }
-    .feedback-log .detail { color: var(--muted); }
-    .feedback-log .success { color: var(--ok); }
-    .feedback-log .error { color: var(--bad); }
-    .feedback-log > div > span:first-child { 
-      color: var(--muted); 
-      width: 25px; 
-      text-align: right;
-    }
-    .feedback-log > div > span:nth-child(2) { color: var(--brand); }
-    
-    /* 4. Resultados (KPIs y Gráfico) */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      text-align: center;
       margin-bottom: 1.5rem;
     }
-    .kpi-box .label {
-      font-size: 0.9rem;
+    .countdown-timer span {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--border);
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+    }
+    .countdown-timer.animate span.active {
+      opacity: 1;
+      background: var(--brand);
+    }
+    .sequence {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80px;
+      font-size: 2rem;
+      letter-spacing: 0.5rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+    }
+    .progress {
+      font-size: 0.85rem;
       color: var(--muted);
+      margin-top: 0.5rem;
+    }
+    .feedback {
+      font-weight: 600;
+    }
+    .feedback .success { color: var(--ok); }
+    .feedback .warning { color: var(--warn); }
+    .feedback .error { color: var(--bad); }
+    .feedback-log {
+      margin-top: 1rem;
+      max-height: 140px;
+      overflow-y: auto;
+      padding: 0.75rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.85rem;
+    }
+    .feedback-log p {
+      margin: 0 0 0.5rem 0;
+    }
+    
+    /* --- KPI boxes --- */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .kpi-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    .kpi-box .label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
     }
     .kpi-box .value {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      line-height: 1.2;
     }
-    canvas {
-      width: 100%;
-      height: 250px;
-      background: var(--bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-    }
-
-    /* --- NUEVO: Tabla de Resultados Chunking --- */
     .chunk-results {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 1.5rem;
-      font-size: 0.9rem;
+      margin-top: 1rem;
     }
     .chunk-results th, .chunk-results td {
       border: 1px solid var(--border);
-      padding: 0.5rem 0.75rem;
+      padding: 0.75rem;
       text-align: left;
-      vertical-align: middle;
     }
     .chunk-results th {
-      background: var(--bg);
-      font-weight: 600;
+      background: #f1f3f5;
+      font-size: 0.9rem;
     }
     .chunk-results td:nth-child(2), .chunk-results td:nth-child(3) {
+      width: 120px;
       text-align: center;
-      font-variant-numeric: tabular-nums;
     }
     .chunk-results .muted { text-align: center; color: var(--muted); }
     .chunk-results code { 
-      font-family: monospace; 
-      font-size: 0.95em;
-      word-break: break-all;
+      font-size: 0.85rem; 
+      background: #f1f3f5;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      display: inline-block;
     }
     .chunk-results .success { color: var(--ok); font-weight: 600; }
     .chunk-results .error { color: var(--bad); font-weight: 600; }
-    
+
+    /* --- Resultados --- */
+    canvas#chart {
+      width: 100%;
+      height: 240px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 1rem;
+    }
+
     /* --- Footer --- */
     footer {
+      padding: 2rem 0;
       text-align: center;
-      padding: 2rem 1rem;
       font-size: 0.9rem;
       color: var(--muted);
-      border-top: 1px solid var(--border);
-      margin-top: 2rem;
     }
     footer a {
       color: var(--brand);
@@ -446,7 +417,7 @@
     <section id="chunk" class="hidden">
       <div class="card">
         <h2>Experimento: Chunking (agrupamiento)</h2>
-        <p>Compararás tu recuerdo de la misma información presentada de dos formas: primero sin estructura y luego agrupada en "chunks" con significado.</p>
+        <p>Harás tres comparaciones con secuencias distintas: primero verás versiones sin guiones y, tras una pausa, sus equivalentes agrupados con guiones para comprobar cómo cambia tu recuerdo.</p>
 
         <div class="controls">
           <div class="control-group">
@@ -463,6 +434,7 @@
         <details style="margin-top: 1rem;">
           <summary style="color: var(--muted); cursor: pointer; font-size: 0.9rem;">Configurar texto personalizado</summary>
           <div class="controls" style="margin-top: 0.5rem;">
+            <p style="margin: 0; font-size: 0.85rem; color: var(--muted); flex: 1 0 100%;">Puedes introducir hasta tres secuencias separadas por comas, punto y coma, barra vertical o saltos de línea.</p>
             <div class="control-group w100">
               <label for="customRaw">Texto sin agrupar</label>
               <input id="customRaw" class="w100" type="text" value="IBMSONYFBICNNUNESCO" />
@@ -483,7 +455,7 @@
           
           <div id="chunkInputGroup" class="hidden">
             <input id="chunkResponse" type="text" class="w100" placeholder="Escribe lo que recuerdes y pulsa Enter" />
-            <div class="progress">Ensayo <span id="chunkTrial">1</span> / 2</div>
+            <div class="progress">Ensayo <span id="chunkTrial">1</span> / <span id="chunkTotal">6</span></div>
             <div id="chunkFeedback" class="feedback"></div>
           </div>
         </div>
@@ -519,24 +491,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td colspan="4" class="muted">Realiza el test de Chunking para ver resultados.</td></tr>
+            <tr>
+              <td colspan="4" class="muted">Realiza el test de Chunking para ver resultados.</td>
+            </tr>
           </tbody>
         </table>
 
-        <h3>Resultados de Span (7±2)</h3>
-        <canvas id="chart"></canvas>
-        <p style="font-size: 0.9rem; color: var(--muted); text-align: center; margin-top: 0.5rem;">Gráfico: Tasa de acierto por longitud de secuencia (Test 7±2).</p>
-        
-        <div class="controls" style="margin-top: 1.5rem;">
+        <h3>Progreso del Span</h3>
+        <canvas id="chart" width="640" height="240"></canvas>
+
+        <div class="controls" style="margin-top: 2rem;">
           <button id="exportCSV">Exportar CSV</button>
-          <button id="clearAll" title="Borrar todo lo guardado">Borrar todos los datos</button>
+          <button id="clearAll">Borrar datos</button>
         </div>
       </div>
     </section>
+
   </main>
 
   <footer>
-    <div class="wrap" style="padding: 0;">
+    <div class="wrap">
       Diseñado por <a href="https://jlmirall.es" target="_blank" rel="noopener noreferrer">José Luis Miralles Bono</a>.
       <br>
       Si te ha gustado, puedes invitarme a una 
@@ -618,57 +592,60 @@
       function runCountdown(el, callback) {
         el.classList.remove('hidden');
         el.classList.add('animate');
-        // Duración total = 3 dots * 1.2s/dot = 3.6s
-        // + un pequeño buffer
-        setTimeout(() => {
-          el.classList.remove('animate');
-          el.classList.add('hidden');
-          callback();
-        }, 3800);
+        const dots = Array.from(el.querySelectorAll('span'));
+        let i = 0;
+        const timer = setInterval(() => {
+          dots.forEach((dot, idx) => {
+            dot.classList.toggle('active', idx === i);
+          });
+          i++;
+          if (i >= dots.length) {
+            clearInterval(timer);
+            setTimeout(() => {
+              el.classList.remove('animate');
+              dots.forEach(dot => dot.classList.remove('active'));
+              el.classList.add('hidden');
+              callback();
+            }, 300);
+          }
+        }, 600);
       }
 
-      // ------------------------- 7±2 -------------------------
+      // ------------------------- SPAN -------------------------
       const seqEl = $('#sequence');
       const respEl = $('#response');
-      const startBtn = $('#startSpan');
-      const resetBtn = $('#resetSpan');
       const progressEl = $('#progress');
       const totalEl = $('#total');
       const feedbackEl = $('#feedback');
-      const feedbackLogEl = $('#feedbackLog'); // <-- NUEVO: Log
+      const feedbackLogEl = $('#feedbackLog');
+      const startBtn = $('#startSpan');
+      const resetBtn = $('#resetSpan');
+      const trialsInput = $('#trials');
 
-      let controller = {
-        running: false,
-        index: 0,
-        total: 12,
-        len: 5,
-        reversals: [],
-        lastDir: null,
-        currentSeq: '',
-        type: 'digits',
-        speed: 750,
-        timer: null
-      };
+      let controller = { running: false, index: 0, total: 12, len: 5, reversals: [], lastDir: null, currentSeq: '', type: 'digits', speed: 750, timer: null };
+
+      function makeDigits(len){ return Array(len).fill(0).map(()=>Math.floor(Math.random()*10)).join(''); }
+      function makeLetters(len){ 
+        const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'; // omitimos O/I
+        return Array(len).fill(0).map(()=>letters[Math.floor(Math.random()*letters.length)]).join('');
+      }
+      function makeWords(len){
+        const pool = ['sol','luz','mar','ola','voz','ave','pan','sal','pez','red','voz','cal','paz','mas','gas','fin','luz','sol','eco','mes'];
+        return Array(len).fill(0).map(()=>pool[Math.floor(Math.random()*pool.length)]).join(' ');
+      }
+      function makeSequence(type, len){
+        if(type === 'digits') return makeDigits(len);
+        if(type === 'letters') return makeLetters(len);
+        return makeWords(len);
+      }
 
       function randFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-      function genItem(type){
-        if(type==='digits') return String(Math.floor(Math.random()*10));
-        if(type==='letters') return String.fromCharCode(65 + Math.floor(Math.random()*26));
-        if(type==='words'){
-          const pool = ['sol','mar','pan','luz','voz','red','sal','té','gas','pie','vez','fin','flor','casa','lago','tren','vino'];
-          return randFrom(pool);
-        }
-        return '?';
-      }
-      function makeSequence(type,len){
-        const items=[]; 
-        while(items.length<len){ items.push(genItem(type)); }
-        return items.join(type === 'words' ? ' ' : '');
-      }
+      function randDirection(){ return Math.random()<0.5 ? -1 : 1; }
+      function clamp(val,min,max){ return Math.max(min, Math.min(max,val)); }
 
       function presentSequence(seq, speed){
         if (controller.timer) clearInterval(controller.timer);
-        const parts = seq.split(controller.type === 'words' ? ' ' : '');
+        const parts = controller.type === 'words' ? seq.split(' ') : seq.split('');
         let i = 0;
         
         seqEl.textContent = '·'; // Preparados
@@ -682,14 +659,13 @@
             clearInterval(controller.timer);
             controller.timer = null;
             
-            // --- MEJORA: Ocultar último ítem ---
-            seqEl.textContent = '...'; // 1. Ocultar ítem
-            setTimeout(() => { // 2. Esperar y mostrar input
+            seqEl.textContent = '...'; // Ocultar ítem final
+            setTimeout(() => {
               seqEl.classList.add('hidden');
               $('#spanInputGroup').classList.remove('hidden');
               respEl.value = '';
               respEl.focus();
-            }, 500); // 500ms de pausa
+            }, 500);
           }
         }, speed);
       }
@@ -742,8 +718,8 @@
         seqEl.classList.add('hidden');
         feedbackEl.textContent = '';
         
-        feedbackLogEl.innerHTML = ''; // <-- NUEVO: Limpiar log
-        feedbackLogEl.classList.remove('hidden'); // <-- NUEVO: Mostrar log
+        feedbackLogEl.innerHTML = '';
+        feedbackLogEl.classList.remove('hidden');
         
         nextTrial();
       }
@@ -777,16 +753,16 @@
           const sim = getSimilarity(given, target);
           const correct = (sim === 1);
           
-          const t = { 
+          const trial = { 
             length: controller.len, 
             type: controller.type, 
             similarity: sim, 
-            correct: correct,
+            correct,
             given, 
             target, 
             ts: Date.now() 
           };
-          state.span.trials.push(t);
+          state.span.trials.push(trial);
           
           const dir = correct ? +1 : -1;
           if(controller.lastDir !== null && dir !== controller.lastDir){ 
@@ -797,7 +773,6 @@
           
           persist();
           
-          // Feedback instantáneo
           if (correct) {
             feedbackEl.innerHTML = '<span class="success">¡Correcto!</span>';
           } else if (sim > 0.7) {
@@ -806,7 +781,6 @@
             feedbackEl.innerHTML = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span> <span class="detail">Era: ${escapeHtml(target)}</span>`;
           }
 
-          // --- NUEVO: Añadir al Log ---
           const attemptNum = state.span.trials.length;
           const icon = correct ? '✅' : (sim > 0.7 ? '⚠️' : '❌');
           const entry = document.createElement('div');
@@ -818,8 +792,7 @@
             <span class="detail">(Era: ${escapeHtml(target)})</span>
           `;
           feedbackLogEl.appendChild(entry);
-          feedbackLogEl.scrollTop = feedbackLogEl.scrollHeight; // Auto-scroll
-          // --- Fin del Log ---
+          feedbackLogEl.scrollTop = feedbackLogEl.scrollHeight;
           
           setTimeout(nextTrial, correct ? 800 : 1200);
         }
@@ -852,54 +825,158 @@
       const chunkResp = $('#chunkResponse');
       const startChunkBtn = $('#startChunk');
       const chunkTrialEl = $('#chunkTrial');
+      const chunkTotalEl = $('#chunkTotal');
       const chunkFeedback = $('#chunkFeedback');
 
-      let chunkCtrl = { phase: 0, start: 0, scenario: 'letters', pair: null };
+      let chunkCtrl = { index: 0, start: 0, scenario: 'letters', queue: [], current: null, total: 0, examples: [] };
 
-      // --- MEJORA: Más ejemplos ---
-      function getScenarioPair(){
-        const sc = $('#chunkScenario').value;
-        if(sc === 'letters'){
-          const pairs = [
-            { raw: 'IBMSONYFBICNNUNESCO', grouped: 'IBM-SONY-FBI-CNN-UNESCO' },
-            { raw: 'OTANONUNASAOMSFMI', grouped: 'OTAN-ONU-NASA-OMS-FMI' },
-            { raw: 'RENFEAEATBOEIVACSIC', grouped: 'RENFE-AEAT-BOE-IVA-CSIC' }
-          ];
-          return randFrom(pairs);
-        } else if(sc === 'phone'){
-          const pairs = [
-            { raw: '603123456789', grouped: '603-123-456-789' },
-            { raw: '91800506070', grouped: '91-800-50-60-70' },
-            { raw: '96477221100', grouped: '964-77-22-11-00' }
-          ];
-          return randFrom(pairs);
-        } else {
-          return { 
-            raw: $('#customRaw').value || 'IBMSONYFBICNNUNESCO', 
-            grouped: $('#customGrouped').value || 'IBM-SONY-FBI-CNN-UNESCO' 
-          };
+      const chunkLibrary = {
+        letters: [
+          { raw: 'OTANUNESCOOMSFAOUE', grouped: 'OTAN-UNESCO-OMS-FAO-UE', label: 'Organismos internacionales' },
+          { raw: 'FMIIBMBBCNASAONU', grouped: 'FMI-IBM-BBC-NASA-ONU', label: 'Siglas mixtas' },
+          { raw: 'SEATRENFEAVEADIFINECO', grouped: 'SEAT-RENFE-AVE-ADIF-INECO', label: 'Transporte español' },
+          { raw: 'CSICESACERNISROCNES', grouped: 'CSIC-ESA-CERN-ISRO-CNES', label: 'Agencias científicas' },
+          { raw: 'DGTINEMECSEPEAEAT', grouped: 'DGT-INE-MEC-SEPE-AEAT', label: 'Instituciones públicas' },
+          { raw: 'ACNURUNICEFCICRCAREOIM', grouped: 'ACNUR-UNICEF-CICR-CARE-OIM', label: 'Organizaciones humanitarias' },
+          { raw: 'MITUOCUNEDUPVUAH', grouped: 'MIT-UOC-UNED-UPV-UAH', label: 'Universidades' },
+          { raw: 'HTMLCSSJSJSONSQL', grouped: 'HTML-CSS-JS-JSON-SQL', label: 'Tecnologías web' },
+          { raw: 'SATAHDMISSDRAMUSB', grouped: 'SATA-HDMI-SSD-RAM-USB', label: 'Tecnología doméstica' },
+          { raw: 'GMAILSLACKTEAMSZOOMMEET', grouped: 'GMAIL-SLACK-TEAMS-ZOOM-MEET', label: 'Herramientas digitales' },
+          { raw: 'MADBCNROMPARLON', grouped: 'MAD-BCN-ROM-PAR-LON', label: 'Ciudades' },
+          { raw: 'IBERIAVUELINGIAGRYANAIR', grouped: 'IBERIA-VUELING-IAG-RYANAIR', label: 'Aerolíneas' }
+        ],
+        phone: [
+          { raw: '603123456789', grouped: '603-123-456-789', label: 'Segmentación móvil' },
+          { raw: '91800506070', grouped: '91-800-50-60-70', label: 'Teléfono largo' },
+          { raw: '96477221100', grouped: '964-77-22-11-00', label: 'Prefijo autonómico' },
+          { raw: '72255443388', grouped: '722-55-44-33-88', label: 'Número repetido' },
+          { raw: '93411223344', grouped: '93-411-22-33-44', label: 'Prefijo Barcelona' },
+          { raw: '95066077088', grouped: '950-66-07-70-88', label: 'Prefijo Almería' },
+          { raw: '62399887766', grouped: '623-99-88-77-66', label: 'Móvil descendente' },
+          { raw: '91000111222', grouped: '91-000-11-12-22', label: 'Capital con bloques' },
+          { raw: '97644556677', grouped: '976-44-55-66-77', label: 'Prefijo Zaragoza' },
+          { raw: '98512323445', grouped: '985-12-32-34-45', label: 'Prefijo Asturias' }
+        ]
+      };
+
+      function shuffleCopy(arr){
+        const copy = arr.slice();
+        for(let i = copy.length - 1; i > 0; i--){
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
         }
+        return copy;
+      }
+
+      function sampleExamples(arr, count){
+        if(!arr.length) return [];
+        return shuffleCopy(arr).slice(0, Math.min(count, arr.length));
+      }
+
+      function finalizeChunkQueue(selection){
+        if(!selection.length) return { queue: [], examples: [] };
+        const examples = selection.map((item, idx) => ({
+          id: idx,
+          raw: item.raw,
+          grouped: item.grouped,
+          label: item.label || `Ejemplo ${idx + 1}`
+        }));
+        const rawEntries = examples.map(ex => ({
+          example: ex.id,
+          phase: 0,
+          version: 'raw',
+          label: ex.label,
+          text: ex.raw
+        }));
+        const groupedEntries = examples.map(ex => ({
+          example: ex.id,
+          phase: 1,
+          version: 'grouped',
+          label: ex.label,
+          text: ex.grouped
+        }));
+        return { queue: [...rawEntries, ...groupedEntries], examples };
+      }
+
+      function buildCustomExamples(){
+        const rawInput = ($('#customRaw').value || 'IBMSONYFBICNNUNESCO').trim();
+        const groupedInput = ($('#customGrouped').value || 'IBM-SONY-FBI-CNN-UNESCO').trim();
+        const splitter = /[\n;,|]+/;
+        const rawList = rawInput.split(splitter).map(s => s.trim()).filter(Boolean);
+        const groupedList = groupedInput.split(splitter).map(s => s.trim()).filter(Boolean);
+        if(!rawList.length) rawList.push('IBMSONYFBICNNUNESCO');
+        if(!groupedList.length) groupedList.push('IBM-SONY-FBI-CNN-UNESCO');
+        const needed = Math.max(3, rawList.length, groupedList.length);
+        const selected = [];
+        for(let i = 0; i < needed && selected.length < 3; i++){
+          selected.push({
+            raw: rawList[i % rawList.length],
+            grouped: groupedList[i % groupedList.length],
+            label: `Personalizado ${i + 1}`
+          });
+        }
+        while(selected.length < 3){
+          selected.push({
+            raw: rawList[selected.length % rawList.length],
+            grouped: groupedList[selected.length % groupedList.length],
+            label: `Personalizado ${selected.length + 1}`
+          });
+        }
+        return finalizeChunkQueue(selected.slice(0, 3));
+      }
+
+      function buildChunkQueue(scenario){
+        if(scenario === 'custom'){
+          return buildCustomExamples();
+        }
+        const library = chunkLibrary[scenario] || [];
+        const selection = sampleExamples(library, 3);
+        if(selection.length){
+          return finalizeChunkQueue(selection);
+        }
+        return finalizeChunkQueue(library.slice(0, 3));
       }
 
       function startChunk(){
-        chunkCtrl = { phase: 0, start: 0, scenario: $('#chunkScenario').value, pair: getScenarioPair() };
+        const scenario = $('#chunkScenario').value;
+        const prepared = buildChunkQueue(scenario);
+        chunkCtrl = { 
+          index: 0, 
+          start: 0, 
+          scenario, 
+          queue: prepared.queue, 
+          current: null, 
+          total: prepared.queue.length, 
+          examples: prepared.examples 
+        };
         state.chunk.results = []; // Reiniciar resultados de chunking
         persist();
         $('#chunkStage').classList.remove('hidden');
         $('#chunkInputGroup').classList.add('hidden');
         chunkDisplay.classList.add('hidden');
         chunkFeedback.textContent = '';
-        chunkTrialEl.textContent = '1';
+        const totalTrials = chunkCtrl.total || 0;
+        chunkTrialEl.textContent = totalTrials ? '1' : '0';
+        if(chunkTotalEl){
+          chunkTotalEl.textContent = totalTrials ? String(totalTrials) : '0';
+        }
+        if(!chunkCtrl.total){
+          chunkFeedback.innerHTML = '<span class="error">No hay ejemplos configurados para este escenario.</span>';
+          return;
+        }
+        const first = chunkCtrl.queue[0];
+        chunkFeedback.innerHTML = '<span class="muted">Empieza con una secuencia sin guiones.</span>';
         
         runCountdown(chunkCountdownEl, () => {
-          presentChunk(chunkCtrl.pair.raw);
+          presentChunk(first);
         });
       }
 
-      function presentChunk(text){
+      function presentChunk(entry){
         chunkResp.value = ''; 
-        chunkDisplay.textContent = text;
+        chunkDisplay.textContent = entry.text;
         chunkDisplay.classList.remove('hidden');
+        chunkCtrl.current = entry;
         
         setTimeout(() => { 
           chunkDisplay.classList.add('hidden');
@@ -911,44 +988,57 @@
       }
 
       function endChunkTrial(given){
-        const target = chunkCtrl.phase === 0 ? chunkCtrl.pair.raw : chunkCtrl.pair.grouped;
+        if(!chunkCtrl.current) return;
+        const target = chunkCtrl.current.text;
         const sim = getSimilarity(given, target);
         const ok = (sim === 1);
         const rt = (performance.now() - chunkCtrl.start) / 1000;
 
         state.chunk.results.push({ 
           scenario: chunkCtrl.scenario, 
-          phase: chunkCtrl.phase, 
+          phase: chunkCtrl.current.phase, 
+          example: chunkCtrl.current.example,
+          version: chunkCtrl.current.version,
+          label: chunkCtrl.current.label,
           similarity: sim,
-          ok: ok, 
+          ok, 
           rt, 
           target, 
           given 
         });
         persist();
         
+        let feedbackMsg;
         if (ok) {
-          chunkFeedback.innerHTML = '<span class="success">¡Correcto!</span>';
+          feedbackMsg = '<span class="success">¡Correcto!</span>';
         } else if (sim > 0.7) {
-          chunkFeedback.innerHTML = `<span class="warning">¡Casi! (${(sim*100).toFixed(0)}% similitud)</span>`;
+          feedbackMsg = `<span class="warning">¡Casi! (${(sim*100).toFixed(0)}% similitud)</span>`;
         } else {
-          chunkFeedback.innerHTML = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span>`;
+          feedbackMsg = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span>`;
         }
 
-        if(chunkCtrl.phase === 0){
-          chunkCtrl.phase = 1; 
-          chunkTrialEl.textContent = '2';
-          chunkFeedback.innerHTML += ' <br>Ahora, la versión <b>agrupada</b>...';
+        const descriptor = chunkCtrl.current.version === 'raw' ? 'sin guiones' : 'agrupada';
+        chunkFeedback.innerHTML = `${feedbackMsg} <br><span class="muted">${chunkCtrl.current.label} (${descriptor}).</span>`;
+
+        chunkCtrl.current = null;
+        chunkCtrl.index += 1;
+
+        if(chunkCtrl.index < chunkCtrl.total){
+          const next = chunkCtrl.queue[chunkCtrl.index];
+          chunkTrialEl.textContent = String(chunkCtrl.index + 1);
+          chunkFeedback.innerHTML += next.version === 'raw'
+            ? ' <br>Prepárate para otra secuencia sin guiones.'
+            : ' <br>Ahora toca la versión agrupada con guiones.';
           $('#chunkInputGroup').classList.add('hidden');
           
           setTimeout(() => {
             runCountdown(chunkCountdownEl, () => {
-              presentChunk(chunkCtrl.pair.grouped);
+              presentChunk(next);
             });
           }, 1200);
 
         } else {
-          chunkFeedback.innerHTML += ' <br><span class="success">Comparación completada.</span> Revisa tus Resultados.';
+          chunkFeedback.innerHTML += ' <br><span class="success">Comparación completada. Revisa tus Resultados.</span>';
           updateKpis();
           populateChunkTable(); // Actualizar tabla al terminar
         }
@@ -956,6 +1046,7 @@
 
       chunkResp.addEventListener('keydown', (e) => {
         if(e.key === 'Enter' && !$('#chunkStage').classList.contains('hidden')){
+          if(!chunkCtrl.current) return;
           const given = chunkResp.value.trim();
           if(!given) return;
           endChunkTrial(given);
@@ -965,21 +1056,37 @@
       startChunkBtn.addEventListener('click', startChunk);
 
       function computeChunkAdvantage(arr){
-        const last = arr.slice(-2);
-        if(last.length < 2) return null;
-        
-        const raw = last[0].phase === 0 ? last[0] : last[1];
-        const grouped = last[0].phase === 0 ? last[1] : last[0];
-        
-        const accRaw = raw.similarity;
-        const accGrp = grouped.similarity;
-        const timeRaw = raw.rt;
-        const timeGrp = grouped.rt;
-        
-        const accGain = (accGrp - accRaw); // -1 a +1
-        const timeGain = (timeRaw - timeGrp) / Math.max(timeRaw, timeGrp, 0.01);
-        
-        return (0.6 * accGain + 0.4 * timeGain); 
+        if(!arr.length) return null;
+        const byExample = {};
+        arr.forEach(item => {
+          if(typeof item.example === 'undefined') return;
+          const key = item.example;
+          byExample[key] = byExample[key] || { label: item.label };
+          if(item.phase === 0){
+            byExample[key].raw = item;
+          } else if(item.phase === 1){
+            byExample[key].grouped = item;
+          }
+        });
+        const scores = Object.values(byExample)
+          .filter(pair => pair.raw && pair.grouped)
+          .map(pair => {
+            const accGain = pair.grouped.similarity - pair.raw.similarity;
+            const timeGain = (pair.raw.rt - pair.grouped.rt) / Math.max(pair.raw.rt, pair.grouped.rt, 0.01);
+            return (0.6 * accGain + 0.4 * timeGain);
+          });
+        if(!scores.length){
+          const last = arr.slice(-2);
+          if(last.length < 2) return null;
+          const raw = last.find(item => item.phase === 0) || last[0];
+          const grouped = last.find(item => item.phase === 1) || last[last.length - 1];
+          if(!raw || !grouped) return null;
+          const accGain = grouped.similarity - raw.similarity;
+          const timeGain = (raw.rt - grouped.rt) / Math.max(raw.rt, grouped.rt, 0.01);
+          return (0.6 * accGain + 0.4 * timeGain);
+        }
+        const total = scores.reduce((sum, val) => sum + val, 0);
+        return total / scores.length;
       }
 
       // ------------------------- RESULTADOS -------------------------
@@ -988,32 +1095,89 @@
       // --- NUEVA: Función para rellenar la tabla de Chunking ---
       function populateChunkTable() {
         const tableBody = $('#chunkTable tbody');
-        const results = state.chunk.results.slice(-2); // Get last pair
-        
-        if (results.length < 2) {
+        if(!tableBody) return;
+        if (!state.chunk.results.length) {
           tableBody.innerHTML = '<tr><td colspan="4" class="muted">Realiza el test de Chunking para ver resultados.</td></tr>';
           return;
         }
 
-        const raw = results[0].phase === 0 ? results[0] : results[1];
-        const grouped = results[0].phase === 0 ? results[1] : results[0];
+        const groupedByExample = {};
+        state.chunk.results.forEach(item => {
+          if(typeof item.example === 'undefined') return;
+          const key = item.example;
+          groupedByExample[key] = groupedByExample[key] || { label: item.label || `Ejemplo ${key + 1}` };
+          if(item.phase === 0){
+            groupedByExample[key].raw = item;
+          } else if(item.phase === 1){
+            groupedByExample[key].grouped = item;
+          }
+        });
+
+        const order = Object.keys(groupedByExample).map(Number).sort((a, b) => a - b);
+        if(!order.length){
+          const legacy = state.chunk.results.slice(-2);
+          if(legacy.length < 2){
+            tableBody.innerHTML = '<tr><td colspan="4" class="muted">Realiza el test de Chunking para ver resultados.</td></tr>';
+            return;
+          }
+          const rawLegacy = legacy[0].phase === 0 ? legacy[0] : legacy[1];
+          const groupedLegacy = legacy[0].phase === 0 ? legacy[1] : legacy[0];
+          const fallbackHtml = `<tr>
+              <td><strong>Sin agrupar</strong></td>
+              <td class="${rawLegacy.ok ? 'success' : 'error'}">${(rawLegacy.similarity * 100).toFixed(0)}%</td>
+              <td>${rawLegacy.rt.toFixed(2)}s</td>
+              <td><code>${escapeHtml(rawLegacy.given || '')}</code></td>
+            </tr>
+            <tr>
+              <td><strong>Agrupado</strong></td>
+              <td class="${groupedLegacy.ok ? 'success' : 'error'}">${(groupedLegacy.similarity * 100).toFixed(0)}%</td>
+              <td>${groupedLegacy.rt.toFixed(2)}s</td>
+              <td><code>${escapeHtml(groupedLegacy.given || '')}</code></td>
+            </tr>`;
+          tableBody.innerHTML = fallbackHtml;
+          return;
+        }
 
         let html = '';
-        
-        html += `<tr>
-          <td><strong>Sin Agrupar</strong></td>
-          <td class="${raw.ok ? 'success' : 'error'}">${(raw.similarity * 100).toFixed(0)}%</td>
-          <td>${raw.rt.toFixed(2)}s</td>
-          <td><code>${escapeHtml(raw.given)}</code></td>
-        </tr>`;
-        
-        html += `<tr>
-          <td><strong>Agrupado (Chunking)</strong></td>
-          <td class="${grouped.ok ? 'success' : 'error'}">${(grouped.similarity * 100).toFixed(0)}%</td>
-          <td>${grouped.rt.toFixed(2)}s</td>
-          <td><code>${escapeHtml(grouped.given)}</code></td>
-        </tr>`;
-        
+
+        order.forEach((idx, pos) => {
+          const bucket = groupedByExample[idx];
+          const label = bucket.label || `Ejemplo ${pos + 1}`;
+          html += `<tr><td colspan="4"><strong>${escapeHtml(label)}</strong></td></tr>`;
+
+          if(bucket.raw){
+            html += `<tr>
+              <td><strong>Sin agrupar</strong></td>
+              <td class="${bucket.raw.ok ? 'success' : 'error'}">${(bucket.raw.similarity * 100).toFixed(0)}%</td>
+              <td>${bucket.raw.rt.toFixed(2)}s</td>
+              <td><code>${escapeHtml(bucket.raw.given || '')}</code></td>
+            </tr>`;
+          } else {
+            html += `<tr>
+              <td><strong>Sin agrupar</strong></td>
+              <td class="muted">—</td>
+              <td>—</td>
+              <td><code>—</code></td>
+            </tr>`;
+          }
+
+          if(bucket.grouped){
+            html += `<tr>
+              <td><strong>Agrupado</strong></td>
+              <td class="${bucket.grouped.ok ? 'success' : 'error'}">${(bucket.grouped.similarity * 100).toFixed(0)}%</td>
+              <td>${bucket.grouped.rt.toFixed(2)}s</td>
+              <td><code>${escapeHtml(bucket.grouped.given || '')}</code></td>
+            </tr>`;
+          } else {
+            html += `<tr>
+              <td><strong>Agrupado</strong></td>
+              <td class="muted">—</td>
+              <td>—</td>
+              <td><code>—</code></td>
+            </tr>`;
+          }
+        });
+
         tableBody.innerHTML = html;
       }
       
