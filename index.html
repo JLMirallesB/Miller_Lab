@@ -1,980 +1,989 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Miller Lab: 7±2 y Chunking</title>
-  <meta name="description" content="Laboratorio interactivo para experimentar con el Número Mágico 7±2 y el Chunking.">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #f8f9fa;       /* Un gris muy claro */
-      --card: #ffffff;      /* Blanco puro */
-      --text: #212529;      /* Negro suave */
-      --muted: #6c757d;     /* Gris para texto secundario */
-      --border: #e9ecef;    /* Borde sutil */
-      --brand: #007bff;     /* Azul primario */
-      --ok: #28a745;        /* Verde */
-      --warn: #fd7e14;      /* Naranja */
-      --bad: #dc3545;       /* Rojo */
-      --radius: 12px;
-      --shadow: 0 4px 12px rgba(0,0,0,.04);
-    }
-    * { box-sizing: border-box; }
-    html { font-size: 16px; }
-    body {
-      margin: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    
-    .wrap {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 1.5rem 1rem;
-    }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Miller Lab: 7±2 y Chunking</title>
+  <meta name="description" content="Laboratorio interactivo para experimentar con el Número Mágico 7±2 y el Chunking.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f8f9fa;       /* Un gris muy claro */
+      --card: #ffffff;      /* Blanco puro */
+      --text: #212529;      /* Negro suave */
+      --muted: #6c757d;     /* Gris para texto secundario */
+      --border: #e9ecef;    /* Borde sutil */
+      --brand: #007bff;     /* Azul primario */
+      --ok: #28a745;        /* Verde */
+      --warn: #fd7e14;      /* Naranja */
+      --bad: #dc3545;       /* Rojo */
+      --radius: 12px;
+      --shadow: 0 4px 12px rgba(0,0,0,.04);
+    }
+    * { box-sizing: border-box; }
+    html { font-size: 16px; }
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
 
-    /* --- Cabecera y Navegación --- */
-    header {
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
-      background: rgba(255,255,255,.7);
-      backdrop-filter: blur(8px);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    header .wrap {
-      padding-top: 0; padding-bottom: 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
-    h1 {
-      font-size: 1.5rem;
-      margin: 0;
-    }
-    h1 .muted {
-      font-weight: 400;
-      color: var(--muted);
-    }
-    nav {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .tab {
-      display: inline-block;
-      font: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      padding: 0.5rem 0.8rem;
-      border: 1px solid transparent;
-      border-radius: 99px;
-      background: none;
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .tab:hover {
-      background: var(--bg);
-      color: var(--text);
-    }
-    .tab.active {
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
-    }
+    /* --- Cabecera y Navegación --- */
+    header {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,.7);
+      backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header .wrap {
+      padding-top: 0; padding-bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+    h1 .muted {
+      font-weight: 400;
+      color: var(--muted);
+    }
+    nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .tab {
+      display: inline-block;
+      font: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.5rem 0.8rem;
+      border: 1px solid transparent;
+      border-radius: 99px;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .tab:hover {
+      background: var(--bg);
+      color: var(--text);
+    }
+    .tab.active {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
 
-    /* --- Contenido Principal y Tarjetas --- */
-    main { padding-top: 2rem; }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 1.5rem 1.75rem;
-      margin-bottom: 1.5rem;
-    }
-    h2 {
-      font-size: 1.75rem;
-      margin: 0 0 1rem 0;
-    }
-    p { margin: 0 0 1rem 0; }
-    .hidden { display: none; }
-    
-    /* --- Controles (Selects, Botones) --- */
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      align-items: center;
-      padding: 0.75rem;
-      background: var(--bg);
-      border-radius: var(--radius);
-      margin-top: 1.5rem;
-    }
-    .control-group {
-      display: flex;
-      flex-direction: column;
-    }
-    .control-group label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 0.25rem;
-    }
-    select, input[type="text"], input[type="number"], button {
-      font: inherit;
-      font-size: 1rem;
-      padding: 0.6rem 0.8rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--card);
-      color: var(--text);
-      outline-color: var(--brand);
-    }
-    input[type="number"] { width: 70px; }
-    button {
-      cursor: pointer;
-      background: #f1f3f5; /* gris claro */
-      color: var(--text);
-      font-weight: 600;
-      border: 1px solid var(--border);
-      transition: all 0.1s ease;
-    }
-    button:hover {
-      border-color: #ced4da;
-    }
-    button:active {
-      transform: scale(0.98);
-    }
-    button.primary {
-      background: var(--brand);
-      color: #fff;
-      border-color: var(--brand);
-    }
-    button.primary:hover {
-      border-color: #0056b3;
-      background: #0056b3;
-    }
-    .w100 { width: 100%; }
+    /* --- Contenido Principal y Tarjetas --- */
+    main { padding-top: 2rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    h2 {
+      font-size: 1.75rem;
+      margin: 0 0 1rem 0;
+    }
+    p { margin: 0 0 1rem 0; }
+    .hidden { display: none; }
+    
+    /* --- Controles (Selects, Botones) --- */
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      padding: 0.75rem;
+      background: var(--bg);
+      border-radius: var(--radius);
+      margin-top: 1.5rem;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .control-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+    select, input[type="text"], input[type="number"], button {
+      font: inherit;
+      font-size: 1rem;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--card);
+      color: var(--text);
+      outline-color: var(--brand);
+    }
+    input[type="number"] { width: 70px; }
+    button {
+      cursor: pointer;
+      background: #f1f3f5; /* gris claro */
+      color: var(--text);
+      font-weight: 600;
+      border: 1px solid var(--border);
+      transition: all 0.1s ease;
+    }
+    button:hover {
+      border-color: #ced4da;
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    button.primary {
+      background: var(--brand);
+      color: #fff;
+      border-color: var(--brand);
+    }
+    button.primary:hover {
+      border-color: #0056b3;
+      background: #0056b3;
+    }
+    .w100 { width: 100%; }
 
-    /* --- Elementos de la App --- */
-    .stage {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-    
-    /* 1. Cuenta atrás (dibujo) */
-    .countdown-timer {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      align-items: center;
-      height: 100px;
-    }
-    .countdown-timer span {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--border);
-      opacity: 0;
-      animation: countdown-dot 1.2s ease-in-out both;
-    }
-    .countdown-timer.animate span:nth-child(1) { animation-delay: 0s; }
-    .countdown-timer.animate span:nth-child(2) { animation-delay: 1.2s; }
-    .countdown-timer.animate span:nth-child(3) { animation-delay: 2.4s; }
-    
-    @keyframes countdown-dot {
-      0%, 100% { opacity: 0; transform: scale(0.8); }
-      30%, 70% { opacity: 1; transform: scale(1); }
-    }
+    /* --- Elementos de la App --- */
+    .stage {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    /* 1. Cuenta atrás (dibujo) */
+    .countdown-timer {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+    }
+    .countdown-timer span {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--border);
+      opacity: 0;
+      animation: countdown-dot 1.2s ease-in-out both;
+    }
+    .countdown-timer.animate span:nth-child(1) { animation-delay: 0s; }
+    .countdown-timer.animate span:nth-child(2) { animation-delay: 1.2s; }
+    .countdown-timer.animate span:nth-child(3) { animation-delay: 2.4s; }
+    
+    @keyframes countdown-dot {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      30%, 70% { opacity: 1; transform: scale(1); }
+    }
 
-    /* 2. Display de Secuencia */
-    .sequence {
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-align: center;
-      padding: 1.5rem;
-      border-radius: var(--radius);
-      background: var(--bg);
-      border: 1px solid var(--border);
-      min-height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-variant-numeric: tabular-nums;
-    }
-    
-    /* 3. Feedback */
-    .progress {
-      text-align: right;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin: 0.5rem 0;
-    }
-    .feedback {
-      font-size: 0.9rem;
-      min-height: 1.5em;
-      margin-top: 0.5rem;
-    }
-    .feedback .success { color: var(--ok); font-weight: 600; }
-    .feedback .warning { color: var(--warn); font-weight: 600; }
-    .feedback .error { color: var(--bad); font-weight: 600; }
-    .feedback .detail {
-      color: var(--muted);
-      font-family: monospace;
-      font-size: 0.85rem;
-    }
-    
-    /* 4. Resultados (KPIs y Gráfico) */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-    .kpi-box .label {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .kpi-box .value {
-      font-size: 1.75rem;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-    canvas {
-      width: 100%;
-      height: 250px;
-      background: var(--bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-    }
-    
-    /* --- Footer --- */
-    footer {
-      text-align: center;
-      padding: 2rem 1rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      margin-top: 2rem;
-    }
-    footer a {
-      color: var(--brand);
-      text-decoration: none;
-      font-weight: 600;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    .kofi-button {
-      display: inline-block;
-      background: #fd7e14;
-      color: #fff;
-      padding: 0.5rem 1rem;
-      border-radius: 99px;
-      text-decoration: none;
-      font-weight: 600;
-      margin-left: 0.5rem;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 8px rgba(253, 126, 20, .3);
-    }
-    .kofi-button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(253, 126, 20, .4);
-    }
-  </style>
+    /* 2. Display de Secuencia */
+    .sequence {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-align: center;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      min-height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-variant-numeric: tabular-nums;
+    }
+    
+    /* 3. Feedback */
+    .progress {
+      text-align: right;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0.5rem 0;
+    }
+    .feedback {
+      font-size: 0.9rem;
+      min-height: 1.5em;
+      margin-top: 0.5rem;
+    }
+    .feedback .success { color: var(--ok); font-weight: 600; }
+    .feedback .warning { color: var(--warn); font-weight: 600; }
+    .feedback .error { color: var(--bad); font-weight: 600; }
+    .feedback .detail {
+      color: var(--muted);
+      font-family: monospace;
+      font-size: 0.85rem;
+    }
+    
+    /* 4. Resultados (KPIs y Gráfico) */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .kpi-box .label {
+      font-size: 0.9rem;
+  	 color: var(--muted);
+    }
+    .kpi-box .value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    canvas {
+      width: 100%;
+      height: 250px;
+      background: var(--bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+    
+    /* --- Footer --- */
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    footer a {
+      color: var(--brand);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    .kofi-button {
+      display: inline-block;
+      background: #fd7e14;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 99px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-left: 0.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(253, 126, 20, .3);
+    }
+    .kofi-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(253, 126, 20, .4);
+    }
+  </style>
 </head>
 <body>
 
-  <header>
-    <div class="wrap">
-      <h1>Miller <span class="muted">Lab</span></h1>
-      <nav aria-label="Secciones">
-        <button class="tab active" data-tab="intro">Inicio</button>
-        <button class="tab" data-tab="span">7±2</button>
-        <button class="tab" data-tab="chunk">Chunking</button>
-        <button class="tab" data-tab="result">Resultados</button>
-      </nav>
-    </div>
-  </header>
+  <header>
+    <div class="wrap">
+      <h1>Miller <span class="muted">Lab</span></h1>
+      <nav aria-label="Secciones">
+        <button class="tab active" data-tab="intro">Inicio</button>
+        <button class="tab" data-tab="span">7±2</button>
+        <button class="tab" data-tab="chunk">Chunking</button>
+        <button class="tab" data-tab="result">Resultados</button>
+      </nav>
+    </div>
+  </header>
 
-  <main class="wrap">
+  <main class="wrap">
 
-    <section id="intro">
-      <div class="card">
-        <h2>Bienvenido al Laboratorio Miller</h2>
-        <p>
-          Esta es una herramienta simple para explorar dos conceptos clave de la psicología cognitiva descritos por George A. Miller:
-        </p>
-        <ul>
-          <li><strong>Número Mágico 7±2:</strong> Mide el límite de tu memoria a corto plazo (span de memoria).</li>
-          <li><strong>Chunking:</strong> Comprueba cómo agrupar la información en "chunks" (trozos) con significado te permite superar ese límite.</li>
-        </ul>
-        <p>Los datos se guardan solo en tu navegador. ¡Empieza cuando quieras!</p>
-        <div class="controls" style="background: none; padding-left: 0;">
-          <button class="primary" data-go="span">Empezar Test 7±2</button>
-          <button data-go="chunk">Ir a Chunking</button>
-        </div>
-      </div>
-    </section>
+    <section id="intro">
+      <div class="card">
+        <h2>Bienvenido al Laboratorio Miller</h2>
+        <p>
+          Esta es una herramienta simple para explorar dos conceptos clave de la psicología cognitiva descritos por George A. Miller:
+        </p>
+        <ul>
+          <li><strong>Número Mágico 7±2:</strong> Mide el límite de tu memoria a corto plazo (span de memoria).</li>
+          <li><strong>Chunking:</strong> Comprueba cómo agrupar la información en "chunks" (trozos) con significado te permite superar ese límite.</li>
+        </ul>
+        <p>Los datos se guardan solo en tu navegador. ¡Empieza cuando quieras!</p>
+        <div class="controls" style="background: none; padding-left: 0;">
+          <button class="primary" data-go="span">Empezar Test 7±2</button>
+          <button data-go="chunk">Ir a Chunking</button>
+        </div>
+      </div>
+    </section>
 
-    <section id="span" class="hidden">
-      <div class="card">
-        <h2>Experimento: Número mágico 7 ± 2</h2>
-        <p>Verás una secuencia de ítems, uno por uno. Cuando termine, escríbela <strong>en el orden exacto</strong>. La longitud se ajustará automáticamente según tus aciertos.</p>
+    <section id="span" class="hidden">
+      <div class="card">
+        <h2>Experimento: Número mágico 7 ± 2</h2>
+        <p>Verás una secuencia de ítems, uno por uno. Cuando termine, escríbela <strong>en el orden exacto</strong>. La longitud se ajustará automáticamente según tus aciertos.</p>
+        
+        <div class="controls">
+          <div class="control-group">
+            <label for="stimulus">Estímulo</label>
+            <select id="stimulus">
+              <option value="digits">Dígitos (0–9)</option>
+              <option value="letters">Letras (A–Z)</option>
+            	<option value="words">Palabras cortas</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="speed">Velocidad</label>
+            <select id="speed">
+              <option value="1000">Lenta (1s/ítem)</option>
+              <option value="750" selected>Media (0.75s/ítem)</option>
+  	           <option value="500">Rápida (0.5s/ítem)</option>
+            </select>
+          </div>
+          <div class="control-group">
+            <label for="trials">Intentos</label>
+            <input id="trials" type="number" min="6" max="20" value="12" />
+          </div>
+          <button id="startSpan" class="primary">Iniciar</button>
+          <button id="resetSpan" title="Borrar datos de esta sesión">Reiniciar</button>
+        </div>
+
+        <div id="spanStage" class="stage hidden">
+          <div id="countdown" class="countdown-timer">
+          	<span></span><span></span><span></span>
+          </div>
+          
+          <div id="sequence" class="sequence hidden" aria-live="polite">—</div>
+          
+          <div id="spanInputGroup" class="hidden">
+          	<input id="response" type="text" autocomplete="off" class="w100" placeholder="Escribe la secuencia y pulsa Enter" />
+          	<div class="progress"><span id="progress">0</span> / <span id="total">0</span> intentos</div>
+          	<div id="feedback" class="feedback"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  	<section id="chunk" class="hidden">
+      <div class="card">
+        <h2>Experimento: Chunking (agrupamiento)</h2>
+        <p>Compararás tu recuerdo de la misma información presentada de dos formas: primero sin estructura y luego agrupada en "chunks" con significado.</p>
+
+        <div class="controls">
+          <div class="control-group">
+          	<label for="chunkScenario">Escenario</label>
+          	<select id="chunkScenario">
+          	  <option value="letters" selected>Letras vs. Siglas</option>
+          	  <option value="phone">Número largo vs. Teléfono</option>
+          	  <option value="custom">Personalizado</option>
+          	</select>
+          </div>
+          <button id="startChunk" class="primary">Iniciar comparación</button>
+        </div>
+        
+        <details class="mt16">
+  	       <summary style="color: var(--muted); cursor: pointer; font-size: 0.9rem;">Configurar texto personalizado</summary>
+  	       <div class="controls" style="margin-top: 0.5rem;">
+          	  <div class="control-group w100">
+          	 	 <label for="customRaw">Texto sin agrupar</label>
+          	 	 <input id="customRaw" class="w100" type="text" value="IBMSONYFBICNNUNESCO" />
+          	  </div>
+          	  <div class="control-group w100">
+          		  <label for="customGrouped">Texto agrupado (usa espacios/guiones)</label>
+          		  <input id="customGrouped" class="w100" type="text" value="IBM-SONY-FBI-CNN-UNESCO" />
+          	  </div>
+          </div>
+        </details>
+
+    	  <div id="chunkStage" class="stage hidden">
+  	       <div id="chunkCountdown" class="countdown-timer">
+  	 	       <span></span><span></span><span></span>
+  	 	     </div>
+  	 	     
+  	 	     <div id="chunkDisplay" class="sequence hidden">—</div>
+  	 	     
+  	 	     <div id="chunkInputGroup" class="hidden">
+  	 	       <input id="chunkResponse" type="text" class="w100" placeholder="Escribe lo que recuerdes y pulsa Enter" />
+  	 	       <div class="progress">Ensayo <span id="chunkTrial">1</span> / 2</div>
+  	 	       <div id="chunkFeedback" class="feedback"></div>
+  	 	     </div>
+  	 	  </div>
+      </div>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="card">
+        <h2>Tus Resultados</h2>
+        <div class="kpi-grid">
+          <div class="kpi-box">
+            <div class="label">Span Estimado</div>
+            <div class="value" id="kpiSpan">—</div>
+          </div>
+          <div class="kpi-box">
+            <div class="label">Precisión (Span)</div>
+          	<div class="value" id="kpiAcc">—</div>
+          </div>
+          <div class="kpi-box">
+            <div class="label">Ventaja Chunking</div>
+            <div class="value" id="kpiChunk">—</div>
+          </div>
+        </div>
+        
+        <canvas id="chart"></canvas>
+        <p style="font-size: 0.9rem; color: var(--muted); text-align: center; margin-top: 0.5rem;">Gráfico: Tasa de acierto por longitud de secuencia (Test 7±2).</p>
+        
+        <div class="controls" style="margin-top: 1.5rem;">
+  	       <button id="exportCSV">Exportar CSV</button>
+  	   	   <button id="clearAll" title="Borrar todo lo guardado">Borrar todos los datos</button>
+  	 	 </div>
+  	  </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap" style="padding: 0;">
+  	   Diseñado por <a href="https://jlmirall.es" target="_blank" rel="noopener noreferrer">José Luis Miralles Bono</a>.
+  	   <br>
+  	   Si te ha gustado, puedes invitarme a una 
+  	   <a href="https://ko-fi.com/miralles" class="kofi-button" target="_blank" rel="noopener noreferrer">Horchata 🥤</a>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const $ = sel => document.querySelector(sel);
+  	   const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+      // --- Estado y Persistencia ---
+  	   const state = {
+  	     span: { trials: [], estimate: null },
+  	   	 chunk: { results: [] }
+      };
+  	   const storeKey = 'miller-lab-v2-storage';
+  	   try { const saved = JSON.parse(localStorage.getItem(storeKey)); if(saved){ Object.assign(state, saved); } } catch(e){}
+  	   const persist = () => localStorage.setItem(storeKey, JSON.stringify(state));
+
+  	   // --- Navegación ---
+  	   function show(tab){
+  	   	 $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  	   	 ['intro','span','chunk','result'].forEach(id=>{
+  	     	 const el = document.getElementById(id);
+  	     	 if(el) el.classList.toggle('hidden', id!==tab);
+  	   	 });
+  	   	 if(tab==='result') drawChart();
+  	   }
+  	   $$('.tab').forEach(t=>t.addEventListener('click', ()=>show(t.dataset.tab)));
+  	   $$('#intro [data-go]').forEach(b=>b.addEventListener('click', ()=>show(b.dataset.go)));
+
+  	   // --- Utilidades ---
+  	   function normalize(s){ return s.replace(/[\s-]+/g,'').toUpperCase(); }
+  	   function escapeHtml(str){ return str.replace(/[&<>'"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[c])); }
+  	   
+  	   /**
+  	    * Calcula la distancia de Levenshtein (coste de edición) entre dos strings.
+  	    * ¡NUEVA FUNCIONALIDAD!
+  	    */
+  	   function levenshtein(a, b) {
+  	   	 if (a.length === 0) return b.length;
+  	 	   if (b.length === 0) return a.length;
+  	   	 const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
+  	   	 for (let i = 0; i <= a.length; i++) { matrix[0][i] = i; }
+  	 	   for (let j = 0; j <= b.length; j++) { matrix[j][0] = j; }
+  	 	   for (let j = 1; j <= b.length; j++) {
+  	     	 for (let i = 1; i <= a.length; i++) {
+  	     	 	 const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+  	 	     	 matrix[j][i] = Math.min(
+  	   	   	 	 matrix[j][i - 1] + 1,   	 	// Deletion
+  	 	     	 	 matrix[j - 1][i] + 1,   	 	// Insertion
+  	 	     	 	 matrix[j - 1][i - 1] + cost // Substitution
+  	 	     	 );
+  	 	     }
+  	 	   }
+  	 	   return matrix[b.length][a.length];
+      }
+
+  	   /**
+  	    * Calcula la similitud basada en Levenshtein.
+  	    * Devuelve un valor entre 0 (nada similar) y 1 (idéntico).
+  	    */
+  	   function getSimilarity(a, b) {
+  	   	 const normA = normalize(a);
+  	 	   const normB = normalize(b);
+  	 	   const maxLen = Math.max(normA.length, normB.length);
+  	 	   if (maxLen === 0) return 1;
+  	 	   const dist = levenshtein(normA, normB);
+  	 	   return 1 - (dist / maxLen);
+  	   }
+  	   
+  	   function download(filename, data, type){
+  	   	 const blob = new Blob([data], {type});
+  	 	   const url = URL.createObjectURL(blob);
+  	 	   const a = document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  	   }
+  	   
+  	   // --- Cuenta atrás Visual ---
+  	   const countdownEl = $('#countdown');
+  	   const chunkCountdownEl = $('#chunkCountdown');
+  	   
+  	   function runCountdown(el, callback) {
+  	   	 el.classList.remove('hidden');
+  	 	   el.classList.add('animate');
+  	 	   // Duración total = 3 dots * 1.2s/dot = 3.6s
+  	 	   // + un pequeño buffer
+  	 	   setTimeout(() => {
+  	 	     el.classList.remove('animate');
+  	 	     	 el.classList.add('hidden');
+  	 	     	 callback();
+  	 	   }, 3800);
+  	   }
+
+  	   // ------------------------- 7±2 -------------------------
+  	   const seqEl = $('#sequence');
+  	   const respEl = $('#response');
+  	   const startBtn = $('#startSpan');
+  	   const resetBtn = $('#resetSpan');
+  	   const progressEl = $('#progress');
+  	   const totalEl = $('#total');
+  	   const feedbackEl = $('#feedback');
+
+  	   let controller = {
+  	   	 running: false,
+  	   	 index: 0,
+  	 	   total: 12,
+  	 	   len: 5,
+  	 	   reversals: [],
+  	 	   lastDir: null,
+  	 	   currentSeq: '',
+  	 	   type: 'digits',
+  	 	   speed: 750,
+  	 	   timer: null
+  	   };
+
+  	   function randFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  	   function genItem(type){
+  	   	 if(type==='digits') return String(Math.floor(Math.random()*10));
+  	 	   if(type==='letters') return String.fromCharCode(65 + Math.floor(Math.random()*26));
+  	 	   if(type==='words'){
+  	 	     const pool = ['sol','mar','pan','luz','voz','red','sal','té','gas','pie','vez','fin','flor','casa','lago','tren','vino'];
+  	 	     	 return randFrom(pool);
+  	 	   }
+  	 	   return '?';
+  	   }
+  	   function makeSequence(type,len){
+  	 	   const items=[]; 
+  	 	   while(items.length<len){ items.push(genItem(type)); }
+  	 	   // Para palabras, separar por espacio; para letras/dígitos, sin espacios
+  	 	   return items.join(type === 'words' ? ' ' : '');
+  	   }
+
+  	   function presentSequence(seq, speed){
+  	   	 if (controller.timer) clearInterval(controller.timer);
+  	 	   const parts = seq.split(controller.type === 'words' ? ' ' : '');
+  	 	   let i = 0;
+  	 	   
+  	 	   seqEl.textContent = '·'; // Preparados
+  	 	   seqEl.classList.remove('hidden');
+
+  	 	   controller.timer = setInterval(() => {
+  	 	     if (i < parts.length) {
+  	 	   	   seqEl.textContent = parts[i]; // Mostrar ítem actual
+  	 	   	   i++;
+  	 	     } else {
+  	 	   	   clearInterval(controller.timer);
+  	 	   	   controller.timer = null;
+  	 	   	   setTimeout(() => {
+  	 	   	   	 seqEl.classList.add('hidden');
+  	 	 	     	 	 $('#spanInputGroup').classList.remove('hidden');
+  	 	 	     	 	 respEl.value = '';
+  	 	 	 	     	 respEl.focus();
+  	 	 	   	   }, speed); 
+  	 	 	     }
+  	 	   }, speed);
+  	   }
+
+  	   function updateKpis(){
+  	   	 const total = state.span.trials.length;
+  	   	 const correct = state.span.trials.filter(t => t.similarity === 1).length;
+  	 	   const acc = total ? (correct / total * 100).toFixed(0) + '%' : '—';
+  	 	   
+  	 	   $('#kpiAcc').textContent = acc;
+  	 	   $('#kpiSpan').textContent = state.span.estimate ? state.span.estimate.toFixed(1) : '—';
+  	 	   
+  	 	   const ch = state.chunk.results.length ? computeChunkAdvantage(state.chunk.results) : null;
+  	 	   $('#kpiChunk').textContent = ch ? (ch > 0 ? '+' : '') + (ch * 100).toFixed(0) + '%' : '—';
+  	   }
+
+  	   function estimateSpan(){
+  	   	 const correctTrials = state.span.trials.filter(t => t.similarity === 1);
+  	 	   const correctLens = correctTrials.map(t => t.length);
+  	 	   const maxCorrect = correctLens.length ? Math.max(...correctLens) : 0;
+  	 	   
+  	 	   // Media de las últimas 3-4 reversiones
+  	 	   const revs = controller.reversals.slice(-4);
+  	 	   const revAvg = revs.length > 1 ? revs.reduce((a,b)=>a+b,0) / revs.length : 0;
+  	 	   
+  	 	   // El span es el máximo entre el pico de acierto y la media de reversiones
+  	 	   const est = Math.max(maxCorrect, revAvg);
+  	 	   state.span.estimate = est > 0 ? est : null;
+  	   }
+
+  	   function startSpan(){
+  	 	   if (controller.timer) clearInterval(controller.timer);
+  	 	   controller = { 
+  	 	   	 running: true, 
+  	 	 	   index: 0, 
+  	 	 	   total: parseInt($('#trials').value, 10), 
+  	 	 	   len: 5, 
+  	 	 	   reversals: [], 
+  	 	 	   lastDir: null, 
+  	 	 	   currentSeq: '', 
+  	 	 	   type: $('#stimulus').value, 
+  	 	 	   speed: parseInt($('#speed').value, 10), 
+  	 	 	   timer: null 
+  	   	 };
+  	 	   state.span.trials = [];
+  	 	   persist();
+  	 	   
+  	 	   totalEl.textContent = controller.total; 
+  	 	   progressEl.textContent = '0';
+  	 	   $('#spanStage').classList.remove('hidden');
+  	 	   $('#spanInputGroup').classList.add('hidden');
+  	 	   seqEl.classList.add('hidden');
+  	 	   feedbackEl.textContent = '';
+  	 	   
+  	 	   nextTrial();
+  	   }
+  	   
+  	   function nextTrial(){
+  	   	 if(controller.index >= controller.total){
+  	 	     feedbackEl.innerHTML = '<span class="success">Sesión terminada. Revisa tus resultados.</span>';
+  	 	     	 estimateSpan(); persist(); updateKpis();
+  	 	     	 controller.running = false;
+  	 	     	 return;
+  	 	   }
+  	 	   
+  	 	   $('#spanInputGroup').classList.add('hidden');
+  	 	   controller.currentSeq = makeSequence(controller.type, controller.len);
+  	 	   seqEl.textContent = '·';
+  	 	   feedbackEl.textContent = '';
+
+  	 	   // Empezar cuenta atrás, y al terminar, presentar secuencia
+  	 	   runCountdown(countdownEl, () => {
+  	 	   	 presentSequence(controller.currentSeq, controller.speed);
+  	 	   });
+  	 	   
+  	 	   controller.index++; 
+  	 	   progressEl.textContent = String(controller.index);
+  	   }
+
+  	   respEl.addEventListener('keydown', (e) => {
+  	 	   if(e.key === 'Enter' && controller.running && !controller.timer){
+  	 	   	 const given = respEl.value.trim();
+  	 	   	 const target = controller.currentSeq;
+  	 	   	 
+  	 	   	 // ¡NUEVA LÓGICA DE SIMILITUD!
+  	 	 	   const sim = getSimilarity(given, target);
+  	 	   	 const correct = (sim === 1); // Solo acierto perfecto
+  	 	   	 
+  	 	   	 const t = { 
+  	 	   	 	 length: controller.len, 
+  	 	   	 	 type: controller.type, 
+  	 	   	 	 similarity: sim, 
+  	 	   	 	 correct: correct, // 'correct' se sigue guardando por si acaso
+  	 	   	 	 given, 
+  	 	   	 	 target, 
+  	 	   	 	 ts: Date.now() 
+  	 	 	   };
+  	 	 	   state.span.trials.push(t);
+  	 	 	   
+  	 	 	   // Lógica adaptativa: si acierta perfecto, +1; si falla (cualquier similitud < 1), -1
+  	 	 	   const dir = correct ? +1 : -1;
+  	 	 	   if(controller.lastDir !== null && dir !== controller.lastDir){ 
+  	 	 	   	 controller.reversals.push(controller.len); 
+  	 	 	   }
+  	 	 	   controller.lastDir = dir;
+  	 	 	   controller.len = Math.max(3, controller.len + dir);
+  	 	 	   
+  	 	 	   persist();
+  	 	 	   
+  	 	 	   // Feedback basado en similitud
+  	 	 	   if (correct) {
+  	 	 	   	 feedbackEl.innerHTML = '<span class="success">¡Correcto!</span>';
+  	 	 	   } else if (sim > 0.7) {
+  	 	 	   	 feedbackEl.innerHTML = `<span class="warning">¡Casi! (${(sim*100).toFixed(0)}% similitud)</span> <span class="detail">Era: ${escapeHtml(target)}</span>`;
+  	 	 	   } else {
+  	 	 	   	 feedbackEl.innerHTML = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span> <span class="detail">Era: ${escapeHtml(target)}</span>`;
+  	 	 	   }
+  	 	 	   
+  	 	 	   setTimeout(nextTrial, correct ? 800 : 1200);
+  	 	   }
+  	   });
+
+  	   resetBtn.addEventListener('click', () => {
+  	 	   if (controller.timer) clearInterval(controller.timer);
+  	 	   controller.running = false; 
+  	 	   state.span.trials = []; 
+  	 	   state.span.estimate = null; 
+  	 	   controller.reversals = []; 
+  	 	   persist();
+  	 	   
+  	 	   seqEl.textContent = '—'; 
+  	 	   feedbackEl.textContent = ''; 
+  	 	   progressEl.textContent = '0'; 
+  	 	   totalEl.textContent = '0'; 
+  	 	   respEl.value = '';
+  	 	   $('#spanStage').classList.add('hidden');
+  	 	   $('#spanInputGroup').classList.add('hidden');
+  	 	   seqEl.classList.add('hidden');
+  	 	   updateKpis();
+  	   });
+  	   
+  	   startBtn.addEventListener('click', startSpan);
+
+  	   // ------------------------- CHUNKING -------------------------
+  	   const chunkDisplay = $('#chunkDisplay');
+  	   const chunkResp = $('#chunkResponse');
+  	   const startChunkBtn = $('#startChunk');
+  	   const chunkTrialEl = $('#chunkTrial');
+  	   const chunkFeedback = $('#chunkFeedback');
+
+  	   let chunkCtrl = { phase: 0, start: 0, scenario: 'letters', pair: null };
+
+  	   function getScenarioPair(){
+  	   	 const sc = $('#chunkScenario').value;
+  	 	   if(sc === 'letters'){
+  	 	   	 return { raw: 'IBMSONYFBICNNUNESCO', grouped: 'IBM-SONY-FBI-CNN-UNESCO' };
+  	 	   } else if(sc === 'phone'){
+  	 	   	 return { raw: '603123456789', grouped: '603-123-456-789' };
+  	 	   } else {
+  	 	   	 return { 
+  	 	   	 	 raw: $('#customRaw').value || 'IBMSONYFBICNNUNESCO', 
+  	 	 	   	 	 grouped: $('#customGrouped').value || 'IBM-SONY-FBI-CNN-UNESCO' 
+  	 	 	   	 };
+  	 	   }
+  	   }
+
+  	   function startChunk(){
+  	   	 chunkCtrl = { phase: 0, start: 0, scenario: $('#chunkScenario').value, pair: getScenarioPair() };
+  	 	   state.chunk.results = []; // Reiniciar resultados de chunking
+  	 	   persist();
+  	 	   $('#chunkStage').classList.remove('hidden');
+  	 	   $('#chunkInputGroup').classList.add('hidden');
+  	 	   chunkDisplay.classList.add('hidden');
+  	 	   chunkFeedback.textContent = '';
+  	 	   chunkTrialEl.textContent = '1';
+  	 	   
+  	 	   // Empezar cuenta atrás, luego presentar
+  	 	   runCountdown(chunkCountdownEl, () => {
+  	 	   	 presentChunk(chunkCtrl.pair.raw);
+  	 	   });
+  	   }
+
+  	   function presentChunk(text){
+  	 	   chunkResp.value = ''; 
+  	 	   chunkDisplay.textContent = text;
+  	 	   chunkDisplay.classList.remove('hidden');
+  	 	   
+  	 	   // Mostrar 2.5 segundos
+  	 	   setTimeout(() => { 
+  	 	   	 chunkDisplay.classList.add('hidden');
+  	 	   	 $('#chunkInputGroup').classList.remove('hidden');
+  	 	   	 chunkResp.value = ''; 
+  	 	 	   chunkResp.focus(); 
+  	 	 	   chunkCtrl.start = performance.now();s
+  	 	   }, 2500);
+  	   }
+
+  	   function endChunkTrial(given){
+  	   	 const target = chunkCtrl.phase === 0 ? chunkCtrl.pair.raw : chunkCtrl.pair.grouped;
+  	 	   const sim = getSimilarity(given, target);
+  	 	   const ok = (sim === 1);
+  	 	   const rt = (performance.now() - chunkCtrl.start) / 1000;
+
+  	 	   state.chunk.results.push({ 
+  	 	   	 scenario: chunkCtrl.scenario, 
+  	 	   	 phase: chunkCtrl.phase, 
+  	 	   	 similarity: sim,
+  	 	   	 ok: ok, 
+  	 	   	 rt, 
+  	 	   	 target, 
+  	 	   	 given 
+  	 	   });
+  	 	   persist();
+  	 	   
+  	 	   // Feedback
+  	 	   if (ok) {
+  	 	   	 chunkFeedback.innerHTML = '<span class="success">¡Correcto!</span>';
+  	 	   } else if (sim > 0.7) {
+  	 	   	 chunkFeedback.innerHTML = `<span class="warning">¡Casi! (${(sim*100).toFixed(0)}% similitud)</span>`;
+  	 	   } else {
+  	 	   	 chunkFeedback.innerHTML = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span>`;
+  	 	   }
+
+  	 	   // Transición
+  	 	   if(chunkCtrl.phase === 0){
+  	 	   	 chunkCtrl.phase = 1; 
+  	 	 	   chunkTrialEl.textContent = '2';
+_ 	 	 	   chunkFeedback.innerHTML += ' <br>Ahora, la versión <b>agrupada</b>...';
+_ 	 	 	   $('#chunkInputGroup').classList.add('hidden');
+  	 	 	   
+  	 	 	   setTimeout(() => {
+  	 	 	   	 runCountdown(chunkCountdownEl, () => {
+  	 	 	   	 	 presentChunk(chunkCtrl.pair.grouped);
+  	 	 	   	 });
+  	 	 	   }, 1200);
+
+  	 	   } else {
+  	 	   	 chunkFeedback.innerHTML += ' <br><span class="success">Comparación completada.</span> Revisa tus Resultados.';
+  	 	   	 updateKpis();
+  	 	   }
+  	   }
+
+  	   chunkResp.addEventListener('keydown', (e) => {
+  	   	 if(e.key === 'Enter' && !$('#chunkStage').classList.contains('hidden')){
+  	 	   	 const given = chunkResp.value.trim();
+  	 	   	 if(!given) return;
+  	 	   	 endChunkTrial(given);
+  	 	   }
+  	   });
+
+  	   startChunkBtn.addEventListener('click', startChunk);
+
+  	   function computeChunkAdvantage(arr){
+  	   	 const last = arr.slice(-2);
+  	 	   if(last.length < 2) return null;
+  	 	   
+  	 	   const raw = last[0].phase === 0 ? last[0] : last[1];
+  	 	   const grouped = last[0].phase === 0 ? last[1] : last[0];
+  	 	   
+  	 	   // Usar similitud en lugar de solo 'ok'
+  	 	   const accRaw = raw.similarity;
+  	 	   const accGrp = grouped.similarity;
+  	 	   const timeRaw = raw.rt;
+  	 	   const timeGrp = grouped.rt;
+  	 	   
+  	 	   const accGain = (accGrp - accRaw); // -1 a +1
+  	 	   const timeGain = (timeRaw - timeGrp) / Math.max(timeRaw, timeGrp, 0.01); // % de ahorro
+  	 	   
+  	 	   // Ponderación: 60% precisión, 40% tiempo
+  	 	   return (0.6 * accGain + 0.4 * timeGain);s
+  	   }
+
+  	   // ------------------------- RESULTADOS -------------------------
+  	   const chartEl = $('#chart');
+  	   
+      // ===== INICIO DE LA CORRECCIÓN =====
+  	   function drawChart(){
+  	 	   const ctx = chartEl.getContext('2d');
+  	 	   ctx.clearRect(0,0,chartEl.width,chartEl.height);
+  	 	   const w = chartEl.clientWidth, h = chartEl.clientHeight;
+  	 	   
+        // --- ¡ARREGLO! ---
+        // Necesitamos leer las variables CSS usando JavaScript
+        const styles = getComputedStyle(document.documentElement);
+        const colorBorder = styles.getPropertyValue('--border').trim();
+        const colorMuted = styles.getPropertyValue('--muted').trim();
+        // ------------------
         
-        <div class="controls">
-          <div class="control-group">
-            <label for="stimulus">Estímulo</label>
-            <select id="stimulus">
-              <option value="digits">Dígitos (0–9)</option>
-              <option value="letters">Letras (A–Z)</option>
-              <option value="words">Palabras cortas</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="speed">Velocidad</label>
-            <select id="speed">
-              <option value="1000">Lenta (1s/ítem)</option>
-              <option value="750" selected>Media (0.75s/ítem)</option>
-              <option value="500">Rápida (0.5s/ítem)</option>
-            </select>
-          </div>
-          <div class="control-group">
-            <label for="trials">Intentos</label>
-            <input id="trials" type="number" min="6" max="20" value="12" />
-          </div>
-          <button id="startSpan" class="primary">Iniciar</button>
-          <button id="resetSpan" title="Borrar datos de esta sesión">Reiniciar</button>
-        </div>
+  	 	   const pad = 40;
+  	 	   ctx.strokeStyle = colorBorder; // <-- CORREGIDO
+  	 	   ctx.fillStyle = colorMuted;   // <-- CORREGIDO
+  	 	   ctx.font = '12px Inter';
+  	 	   
+  	 	   // Ejes
+  	 	   ctx.beginPath();
+  	 	   ctx.moveTo(pad, pad); ctx.lineTo(pad, h - pad); ctx.lineTo(w - pad, h - pad);
+  	 	   ctx.stroke();
+  	 	   
+  	 	   // Etiquetas Ejes
+  	 	   ctx.textAlign = 'left';
+  	 	   ctx.fillText('Precisión (%)', pad, pad - 10);
+  	 	   ctx.textAlign = 'center';
+  	 	   ctx.fillText('Longitud de Secuencia', w / 2, h - pad + 25);
+  	 	   ctx.textAlign = 'right';
+  	 	   ctx.fillText('100%', pad - 8, pad + 5);
+  	 	   ctx.fillText('0%', pad - 8, h - pad);
 
-        <div id="spanStage" class="stage hidden">
-          <div id="countdown" class="countdown-timer">
-            <span></span><span></span><span></span>
-          </div>
-          
-          <div id="sequence" class="sequence hidden" aria-live="polite">—</div>
-          
-          <div id="spanInputGroup" class="hidden">
-            <input id="response" type="text" autocomplete="off" class="w100" placeholder="Escribe la secuencia y pulsa Enter" />
-            <div class="progress"><span id="progress">0</span> / <span id="total">0</span> intentos</div>
-            <div id="feedback" class="feedback"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+  	 	   const trials = state.span.trials;
+  	 	   if(!trials.length) return;
 
-    <section id="chunk" class="hidden">
-      <div class="card">
-        <h2>Experimento: Chunking (agrupamiento)</h2>
-        <p>Compararás tu recuerdo de la misma información presentada de dos formas: primero sin estructura y luego agrupada en "chunks" con significado.</p>
+  	 	   const groups = {};
+  	 	   trials.forEach(t => { 
+  	 	     groups[t.length] = groups[t.length] || {n:0, ok:0}; 
+  	 	     	 groups[t.length].n++; 
+  	 	     	 if(t.similarity === 1) groups[t.length].ok++; 
+  	 	   });
+  	 	   
+  	 	   const lengths = Object.keys(groups).map(n => +n).sort((a,b) => a-b);
+  	 	   if(!lengths.length) return;
+  	 	   
+  	 	   const minL = Math.min(...lengths);
+  	 	   const maxL = Math.max(...lengths);
+  	 	   const numBars = (maxL - minL) + 1;
+  	 	   const xStep = (w - 2 * pad) / Math.max(numBars, 1);
+  	 	   
+  	 	   for (let i = 0; i <= numBars; i++) {
+  	 	   	 const L = minL + i;
+  	 	   	 const group = groups[L];
+  	 	   	 const x = pad + i * xStep;
+  	 	   	 const barW = Math.max(2, xStep * 0.7);
+  	 	   	 
+  	 	   	 if (group) {
+  	 	 	   	 const acc = group.ok / group.n;
+  	 	 	   	 const barH = acc * (h - 2 * pad);
+  	 	 	   	 ctx.fillStyle = 'rgba(0, 123, 255, 0.7)'; // El color --brand en RGBA (esto estaba bien)
+  	 	 	 	   ctx.fillRect(x + (xStep - barW) / 2, h - pad - barH, barW, barH);
+  	 	 	   }
+  	 	 	   
+  	 	 	   ctx.fillStyle = colorMuted; // <-- CORREGIDO
+  	 	 	   ctx.textAlign = 'center';
+  	 	 	   ctx.fillText(String(L), x + xStep / 2, h - pad + 14);
+  	 	   }
+  	   }
+      // ===== FIN DE LA CORRECCIÓN =====
 
-        <div class="controls">
-          <div class="control-group">
-            <label for="chunkScenario">Escenario</label>
-            <select id="chunkScenario">
-              <option value="letters" selected>Letras vs. Siglas</option>
-              <option value="phone">Número largo vs. Teléfono</option>
-              <option value="custom">Personalizado</option>
-            </select>
-          </div>
-          <button id="startChunk" class="primary">Iniciar comparación</button>
-        </div>
-        
-        <details class="mt16">
-          <summary style="color: var(--muted); cursor: pointer; font-size: 0.9rem;">Configurar texto personalizado</summary>
-          <div class="controls" style="margin-top: 0.5rem;">
-            <div class="control-group w100">
-              <label for="customRaw">Texto sin agrupar</label>
-              <input id="customRaw" class="w100" type="text" value="IBMSONYFBICNNUNESCO" />
-            </div>
-            <div class="control-group w100">
-              <label for="customGrouped">Texto agrupado (usa espacios/guiones)</label>
-              <input id="customGrouped" class="w100" type="text" value="IBM-SONY-FBI-CNN-UNESCO" />
-            </div>
-          </div>
-        </details>
+  	   function exportCSV(){
+  	 	   const rows = [];
+  	 	   rows.push(['test','ts','tipo','longitud','similitud','correcto','objetivo','respuesta','rt_s','escenario','fase']);
+  	 	   state.span.trials.forEach(t => {
+  	 	   	 rows.push(['span', new Date(t.ts).toISOString(), t.type, t.length, t.similarity.toFixed(3), t.correct?'1':'0', t.target, t.given, '', '', '']);
+  	 	   });
+  	 	   state.chunk.results.forEach(c => {
+  	 	   	 rows.push(['chunk', new Date().toISOString(), '', '', c.similarity.toFixed(3), c.ok?'1':'0', c.target, c.given, c.rt.toFixed(3), c.scenario, String(c.phase)]);
+  	 	   });
+  	 	   const csv = rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
+  	 	   download('resultados_miller_lab.csv', csv, 'text/csv');
+  	   }
 
-        <div id="chunkStage" class="stage hidden">
-          <div id="chunkCountdown" class="countdown-timer">
-            <span></span><span></span><span></span>
-          </div>
-          
-          <div id="chunkDisplay" class="sequence hidden">—</div>
-          
-          <div id="chunkInputGroup" class="hidden">
-            <input id="chunkResponse" type="text" class="w100" placeholder="Escribe lo que recuerdes y pulsa Enter" />
-            <div class="progress">Ensayo <span id="chunkTrial">1</span> / 2</div>
-            <div id="chunkFeedback" class="feedback"></div>
-          </div>
-        </div>
-      </div>
-    </section>
+  	   function clearAll(){
+  	 	   if(confirm('¿Seguro que deseas borrar todos los datos guardados en este navegador?')){
+  	 	   	 localStorage.removeItem(storeKey);
+  	 	   	 state.span = {trials:[], estimate:null}; 
+  	 	   	 	 state.chunk = {results:[]};
+  	 	   	 updateKpis(); 
+  	 	 	   drawChart();
+  	 	   }
+  	   }
 
-    <section id="result" class="hidden">
-      <div class="card">
-        <h2>Tus Resultados</h2>
-        <div class="kpi-grid">
-          <div class="kpi-box">
-            <div class="label">Span Estimado</div>
-            <div class="value" id="kpiSpan">—</div>
-          </div>
-          <div class="kpi-box">
-            <div class="label">Precisión (Span)</div>
-            <div class="value" id="kpiAcc">—</div>
-          </div>
-          <div class="kpi-box">
-            <div class="label">Ventaja Chunking</div>
-            <div class="value" id="kpiChunk">—</div>
-          </div>
-        </div>
-        
-        <canvas id="chart"></canvas>
-        <p style="font-size: 0.9rem; color: var(--muted); text-align: center; margin-top: 0.5rem;">Gráfico: Tasa de acierto por longitud de secuencia (Test 7±2).</p>
-        
-        <div class="controls" style="margin-top: 1.5rem;">
-          <button id="exportCSV">Exportar CSV</button>
-          <button id="clearAll" title="Borrar todo lo guardado">Borrar todos los datos</button>
-        </div>
-      </div>
-    </section>
-  </main>
+  	   $('#exportCSV').addEventListener('click', exportCSV);
+  	   $('#clearAll').addEventListener('click', clearAll);
 
-  <footer>
-    <div class="wrap" style="padding: 0;">
-      Diseñado por <a href="https://jlmirall.es" target="_blank" rel="noopener noreferrer">José Luis Miralles Bono</a>.
-      <br>
-      Si te ha gustado, puedes invitarme a una 
-      <a href="https://ko-fi.com/miralles" class="kofi-button" target="_blank" rel="noopener noreferrer">Horchata 🥤</a>
-    </div>
-  </footer>
-
-  <script>
-    (function(){
-      const $ = sel => document.querySelector(sel);
-      const $$ = sel => Array.from(document.querySelectorAll(sel));
-
-      // --- Estado y Persistencia ---
-      const state = {
-        span: { trials: [], estimate: null },
-        chunk: { results: [] }
-      };
-      const storeKey = 'miller-lab-v2-storage';
-      try { const saved = JSON.parse(localStorage.getItem(storeKey)); if(saved){ Object.assign(state, saved); } } catch(e){}
-      const persist = () => localStorage.setItem(storeKey, JSON.stringify(state));
-
-      // --- Navegación ---
-      function show(tab){
-        $$('.tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
-        ['intro','span','chunk','result'].forEach(id=>{
-          const el = document.getElementById(id);
-          if(el) el.classList.toggle('hidden', id!==tab);
-        });
-        if(tab==='result') drawChart();
-      }
-      $$('.tab').forEach(t=>t.addEventListener('click', ()=>show(t.dataset.tab)));
-      $$('#intro [data-go]').forEach(b=>b.addEventListener('click', ()=>show(b.dataset.go)));
-
-      // --- Utilidades ---
-      function normalize(s){ return s.replace(/[\s-]+/g,'').toUpperCase(); }
-      function escapeHtml(str){ return str.replace(/[&<>'"]/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;' }[c])); }
-      
-      /**
-       * Calcula la distancia de Levenshtein (coste de edición) entre dos strings.
-       * ¡NUEVA FUNCIONALIDAD!
-       */
-      function levenshtein(a, b) {
-        if (a.length === 0) return b.length;
-        if (b.length === 0) return a.length;
-        const matrix = Array(b.length + 1).fill(null).map(() => Array(a.length + 1).fill(null));
-        for (let i = 0; i <= a.length; i++) { matrix[0][i] = i; }
-        for (let j = 0; j <= b.length; j++) { matrix[j][0] = j; }
-        for (let j = 1; j <= b.length; j++) {
-          for (let i = 1; i <= a.length; i++) {
-            const cost = a[i - 1] === b[j - 1] ? 0 : 1;
-            matrix[j][i] = Math.min(
-              matrix[j][i - 1] + 1,      // Deletion
-              matrix[j - 1][i] + 1,      // Insertion
-              matrix[j - 1][i - 1] + cost // Substitution
-            );
-          }
-        }
-        return matrix[b.length][a.length];
-      }
-
-      /**
-       * Calcula la similitud basada en Levenshtein.
-       * Devuelve un valor entre 0 (nada similar) y 1 (idéntico).
-       */
-      function getSimilarity(a, b) {
-        const normA = normalize(a);
-        const normB = normalize(b);
-        const maxLen = Math.max(normA.length, normB.length);
-        if (maxLen === 0) return 1;
-        const dist = levenshtein(normA, normB);
-        return 1 - (dist / maxLen);
-      }
-      
-      function download(filename, data, type){
-        const blob = new Blob([data], {type});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-      }
-      
-      // --- Cuenta atrás Visual ---
-      const countdownEl = $('#countdown');
-      const chunkCountdownEl = $('#chunkCountdown');
-      
-      function runCountdown(el, callback) {
-        el.classList.remove('hidden');
-        el.classList.add('animate');
-        // Duración total = 3 dots * 1.2s/dot = 3.6s
-        // + un pequeño buffer
-        setTimeout(() => {
-          el.classList.remove('animate');
-          el.classList.add('hidden');
-          callback();
-        }, 3800);
-      }
-
-      // ------------------------- 7±2 -------------------------
-      const seqEl = $('#sequence');
-      const respEl = $('#response');
-      const startBtn = $('#startSpan');
-      const resetBtn = $('#resetSpan');
-      const progressEl = $('#progress');
-      const totalEl = $('#total');
-      const feedbackEl = $('#feedback');
-
-      let controller = {
-        running: false,
-        index: 0,
-        total: 12,
-        len: 5,
-        reversals: [],
-        lastDir: null,
-        currentSeq: '',
-        type: 'digits',
-        speed: 750,
-        timer: null
-      };
-
-      function randFrom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-      function genItem(type){
-        if(type==='digits') return String(Math.floor(Math.random()*10));
-        if(type==='letters') return String.fromCharCode(65 + Math.floor(Math.random()*26));
-        if(type==='words'){
-          const pool = ['sol','mar','pan','luz','voz','red','sal','té','gas','pie','vez','fin','flor','casa','lago','tren','vino'];
-          return randFrom(pool);
-        }
-        return '?';
-      }
-      function makeSequence(type,len){
-        const items=[]; 
-        while(items.length<len){ items.push(genItem(type)); }
-        // Para palabras, separar por espacio; para letras/dígitos, sin espacios
-        return items.join(type === 'words' ? ' ' : '');
-      }
-
-      function presentSequence(seq, speed){
-        if (controller.timer) clearInterval(controller.timer);
-        const parts = seq.split(controller.type === 'words' ? ' ' : '');
-        let i = 0;
-        
-        seqEl.textContent = '·'; // Preparados
-        seqEl.classList.remove('hidden');
-
-        controller.timer = setInterval(() => {
-          if (i < parts.length) {
-            seqEl.textContent = parts[i]; // Mostrar ítem actual
-            i++;
-          } else {
-            clearInterval(controller.timer);
-            controller.timer = null;
-            setTimeout(() => {
-              seqEl.classList.add('hidden');
-              $('#spanInputGroup').classList.remove('hidden');
-              respEl.value = '';
-              respEl.focus();
-            }, speed); 
-          }
-        }, speed);
-      }
-
-      function updateKpis(){
-        const total = state.span.trials.length;
-        const correct = state.span.trials.filter(t => t.similarity === 1).length;
-        const acc = total ? (correct / total * 100).toFixed(0) + '%' : '—';
-        
-        $('#kpiAcc').textContent = acc;
-        $('#kpiSpan').textContent = state.span.estimate ? state.span.estimate.toFixed(1) : '—';
-        
-        const ch = state.chunk.results.length ? computeChunkAdvantage(state.chunk.results) : null;
-        $('#kpiChunk').textContent = ch ? (ch > 0 ? '+' : '') + (ch * 100).toFixed(0) + '%' : '—';
-      }
-
-      function estimateSpan(){
-        const correctTrials = state.span.trials.filter(t => t.similarity === 1);
-        const correctLens = correctTrials.map(t => t.length);
-        const maxCorrect = correctLens.length ? Math.max(...correctLens) : 0;
-        
-        // Media de las últimas 3-4 reversiones
-        const revs = controller.reversals.slice(-4);
-        const revAvg = revs.length > 1 ? revs.reduce((a,b)=>a+b,0) / revs.length : 0;
-        
-        // El span es el máximo entre el pico de acierto y la media de reversiones
-        const est = Math.max(maxCorrect, revAvg);
-        state.span.estimate = est > 0 ? est : null;
-      }
-
-      function startSpan(){
-        if (controller.timer) clearInterval(controller.timer);
-        controller = { 
-          running: true, 
-          index: 0, 
-          total: parseInt($('#trials').value, 10), 
-          len: 5, 
-          reversals: [], 
-          lastDir: null, 
-          currentSeq: '', 
-          type: $('#stimulus').value, 
-          speed: parseInt($('#speed').value, 10), 
-          timer: null 
-        };
-        state.span.trials = [];
-        persist();
-        
-        totalEl.textContent = controller.total; 
-        progressEl.textContent = '0';
-        $('#spanStage').classList.remove('hidden');
-        $('#spanInputGroup').classList.add('hidden');
-        seqEl.classList.add('hidden');
-        feedbackEl.textContent = '';
-        
-        nextTrial();
-      }
-      
-      function nextTrial(){
-        if(controller.index >= controller.total){
-          feedbackEl.innerHTML = '<span class="success">Sesión terminada. Revisa tus resultados.</span>';
-          estimateSpan(); persist(); updateKpis();
-          controller.running = false;
-          return;
-        }
-        
-        $('#spanInputGroup').classList.add('hidden');
-        controller.currentSeq = makeSequence(controller.type, controller.len);
-        seqEl.textContent = '·';
-        feedbackEl.textContent = '';
-
-        // Empezar cuenta atrás, y al terminar, presentar secuencia
-        runCountdown(countdownEl, () => {
-          presentSequence(controller.currentSeq, controller.speed);
-        });
-        
-        controller.index++; 
-        progressEl.textContent = String(controller.index);
-      }
-
-      respEl.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' && controller.running && !controller.timer){
-          const given = respEl.value.trim();
-          const target = controller.currentSeq;
-          
-          // ¡NUEVA LÓGICA DE SIMILITUD!
-          const sim = getSimilarity(given, target);
-          const correct = (sim === 1); // Solo acierto perfecto
-          
-          const t = { 
-            length: controller.len, 
-            type: controller.type, 
-            similarity: sim, 
-            correct: correct, // 'correct' se sigue guardando por si acaso
-            given, 
-            target, 
-            ts: Date.now() 
-          };
-          state.span.trials.push(t);
-          
-          // Lógica adaptativa: si acierta perfecto, +1; si falla (cualquier similitud < 1), -1
-          const dir = correct ? +1 : -1;
-          if(controller.lastDir !== null && dir !== controller.lastDir){ 
-            controller.reversals.push(controller.len); 
-          }
-          controller.lastDir = dir;
-          controller.len = Math.max(3, controller.len + dir);
-          
-          persist();
-          
-          // Feedback basado en similitud
-          if (correct) {
-            feedbackEl.innerHTML = '<span class="success">¡Correcto!</span>';
-          } else if (sim > 0.7) {
-            feedbackEl.innerHTML = `<span class="warning">¡Casi! (${(sim*100).toFixed(0)}% similitud)</span> <span class="detail">Era: ${escapeHtml(target)}</span>`;
-          } else {
-            feedbackEl.innerHTML = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span> <span class="detail">Era: ${escapeHtml(target)}</span>`;
-          }
-          
-          setTimeout(nextTrial, correct ? 800 : 1200);
-        }
-      });
-
-      resetBtn.addEventListener('click', () => {
-        if (controller.timer) clearInterval(controller.timer);
-        controller.running = false; 
-        state.span.trials = []; 
-        state.span.estimate = null; 
-        controller.reversals = []; 
-        persist();
-        
-        seqEl.textContent = '—'; 
-        feedbackEl.textContent = ''; 
-        progressEl.textContent = '0'; 
-        totalEl.textContent = '0'; 
-        respEl.value = '';
-        $('#spanStage').classList.add('hidden');
-        $('#spanInputGroup').classList.add('hidden');
-        seqEl.classList.add('hidden');
-        updateKpis();
-      });
-      
-      startBtn.addEventListener('click', startSpan);
-
-      // ------------------------- CHUNKING -------------------------
-      const chunkDisplay = $('#chunkDisplay');
-      const chunkResp = $('#chunkResponse');
-      const startChunkBtn = $('#startChunk');
-      const chunkTrialEl = $('#chunkTrial');
-      const chunkFeedback = $('#chunkFeedback');
-
-      let chunkCtrl = { phase: 0, start: 0, scenario: 'letters', pair: null };
-
-      function getScenarioPair(){
-        const sc = $('#chunkScenario').value;
-        if(sc === 'letters'){
-          return { raw: 'IBMSONYFBICNNUNESCO', grouped: 'IBM-SONY-FBI-CNN-UNESCO' };
-        } else if(sc === 'phone'){
-          return { raw: '603123456789', grouped: '603-123-456-789' };
-        } else {
-          return { 
-            raw: $('#customRaw').value || 'IBMSONYFBICNNUNESCO', 
-            grouped: $('#customGrouped').value || 'IBM-SONY-FBI-CNN-UNESCO' 
-          };
-        }
-      }
-
-      function startChunk(){
-        chunkCtrl = { phase: 0, start: 0, scenario: $('#chunkScenario').value, pair: getScenarioPair() };
-        state.chunk.results = []; // Reiniciar resultados de chunking
-        persist();
-        $('#chunkStage').classList.remove('hidden');
-        $('#chunkInputGroup').classList.add('hidden');
-        chunkDisplay.classList.add('hidden');
-        chunkFeedback.textContent = '';
-        chunkTrialEl.textContent = '1';
-        
-        // Empezar cuenta atrás, luego presentar
-        runCountdown(chunkCountdownEl, () => {
-          presentChunk(chunkCtrl.pair.raw);
-        });
-      }
-
-      function presentChunk(text){
-        chunkResp.value = ''; 
-        chunkDisplay.textContent = text;
-        chunkDisplay.classList.remove('hidden');
-        
-        // Mostrar 2.5 segundos
-        setTimeout(() => { 
-          chunkDisplay.classList.add('hidden');
-          $('#chunkInputGroup').classList.remove('hidden');
-          chunkResp.value = ''; 
-          chunkResp.focus(); 
-          chunkCtrl.start = performance.now(); 
-        }, 2500);
-      }
-
-      function endChunkTrial(given){
-        const target = chunkCtrl.phase === 0 ? chunkCtrl.pair.raw : chunkCtrl.pair.grouped;
-        const sim = getSimilarity(given, target);
-        const ok = (sim === 1);
-        const rt = (performance.now() - chunkCtrl.start) / 1000;
-
-        state.chunk.results.push({ 
-          scenario: chunkCtrl.scenario, 
-          phase: chunkCtrl.phase, 
-          similarity: sim,
-          ok: ok, 
-          rt, 
-          target, 
-          given 
-        });
-        persist();
-        
-        // Feedback
-        if (ok) {
-          chunkFeedback.innerHTML = '<span class="success">¡Correcto!</span>';
-        } else if (sim > 0.7) {
-          chunkFeedback.innerHTML = `<span class="warning">¡Casi! (${(sim*100).toFixed(0)}% similitud)</span>`;
-        } else {
-          chunkFeedback.innerHTML = `<span class="error">Incorrecto (${(sim*100).toFixed(0)}%).</span>`;
-        }
-
-        // Transición
-        if(chunkCtrl.phase === 0){
-          chunkCtrl.phase = 1; 
-          chunkTrialEl.textContent = '2';
-          chunkFeedback.innerHTML += ' <br>Ahora, la versión <b>agrupada</b>...';
-          $('#chunkInputGroup').classList.add('hidden');
-          
-          setTimeout(() => {
-            runCountdown(chunkCountdownEl, () => {
-              presentChunk(chunkCtrl.pair.grouped);
-            });
-          }, 1200);
-
-        } else {
-          chunkFeedback.innerHTML += ' <br><span class="success">Comparación completada.</span> Revisa tus Resultados.';
-          updateKpis();
-        }
-      }
-
-      chunkResp.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' && !$('#chunkStage').classList.contains('hidden')){
-          const given = chunkResp.value.trim();
-          if(!given) return;
-          endChunkTrial(given);
-        }
-      });
-
-      startChunkBtn.addEventListener('click', startChunk);
-
-      function computeChunkAdvantage(arr){
-        const last = arr.slice(-2);
-        if(last.length < 2) return null;
-        
-        const raw = last[0].phase === 0 ? last[0] : last[1];
-        const grouped = last[0].phase === 0 ? last[1] : last[0];
-        
-        // Usar similitud en lugar de solo 'ok'
-        const accRaw = raw.similarity;
-        const accGrp = grouped.similarity;
-        const timeRaw = raw.rt;
-        const timeGrp = grouped.rt;
-        
-        const accGain = (accGrp - accRaw); // -1 a +1
-        const timeGain = (timeRaw - timeGrp) / Math.max(timeRaw, timeGrp, 0.01); // % de ahorro
-        
-        // Ponderación: 60% precisión, 40% tiempo
-        return (0.6 * accGain + 0.4 * timeGain); 
-      }
-
-      // ------------------------- RESULTADOS -------------------------
-      const chartEl = $('#chart');
-      
-      function drawChart(){
-        const ctx = chartEl.getContext('2d');
-        ctx.clearRect(0,0,chartEl.width,chartEl.height);
-        const w = chartEl.clientWidth, h = chartEl.clientHeight;
-        
-        const pad = 40;
-        ctx.strokeStyle = var(--border);
-        ctx.fillStyle = var(--muted);
-        ctx.font = '12px Inter';
-        
-        // Ejes
-        ctx.beginPath();
-        ctx.moveTo(pad, pad); ctx.lineTo(pad, h - pad); ctx.lineTo(w - pad, h - pad);
-        ctx.stroke();
-        
-        // Etiquetas Ejes
-        ctx.textAlign = 'left';
-        ctx.fillText('Precisión (%)', pad, pad - 10);
-        ctx.textAlign = 'center';
-        ctx.fillText('Longitud de Secuencia', w / 2, h - pad + 25);
-        ctx.textAlign = 'right';
-        ctx.fillText('100%', pad - 8, pad + 5);
-        ctx.fillText('0%', pad - 8, h - pad);
-
-        const trials = state.span.trials;
-        if(!trials.length) return;
-
-        const groups = {};
-        trials.forEach(t => { 
-          groups[t.length] = groups[t.length] || {n:0, ok:0}; 
-          groups[t.length].n++; 
-          if(t.similarity === 1) groups[t.length].ok++; 
-        });
-        
-        const lengths = Object.keys(groups).map(n => +n).sort((a,b) => a-b);
-        if(!lengths.length) return;
-        
-        const minL = Math.min(...lengths);
-        const maxL = Math.max(...lengths);
-        const numBars = (maxL - minL) + 1;
-        const xStep = (w - 2 * pad) / Math.max(numBars, 1);
-        
-        for (let i = 0; i <= numBars; i++) {
-          const L = minL + i;
-          const group = groups[L];
-          const x = pad + i * xStep;
-          const barW = Math.max(2, xStep * 0.7);
-          
-          if (group) {
-            const acc = group.ok / group.n;
-            const barH = acc * (h - 2 * pad);
-            ctx.fillStyle = 'rgba(0, 123, 255, 0.7)'; // brand
-            ctx.fillRect(x + (xStep - barW) / 2, h - pad - barH, barW, barH);
-          }
-          
-          ctx.fillStyle = var(--muted);
-          ctx.textAlign = 'center';
-          ctx.fillText(String(L), x + xStep / 2, h - pad + 14);
-        }
-      }
-
-      function exportCSV(){
-        const rows = [];
-        rows.push(['test','ts','tipo','longitud','similitud','correcto','objetivo','respuesta','rt_s','escenario','fase']);
-        state.span.trials.forEach(t => {
-          rows.push(['span', new Date(t.ts).toISOString(), t.type, t.length, t.similarity.toFixed(3), t.correct?'1':'0', t.target, t.given, '', '', '']);
-        });
-        state.chunk.results.forEach(c => {
-          rows.push(['chunk', new Date().toISOString(), '', '', c.similarity.toFixed(3), c.ok?'1':'0', c.target, c.given, c.rt.toFixed(3), c.scenario, String(c.phase)]);
-        });
-        const csv = rows.map(r => r.map(x => `"${String(x).replace(/"/g,'""')}"`).join(',')).join('\n');
-        download('resultados_miller_lab.csv', csv, 'text/csv');
-      }
-
-      function clearAll(){
-        if(confirm('¿Seguro que deseas borrar todos los datos guardados en este navegador?')){
-          localStorage.removeItem(storeKey);
-          state.span = {trials:[], estimate:null}; 
-          state.chunk = {results:[]};
-          updateKpis(); 
-          drawChart();
-        }
-      }
-
-      $('#exportCSV').addEventListener('click', exportCSV);
-      $('#clearAll').addEventListener('click', clearAll);
-
-      // Init
-      updateKpis();
-      drawChart();
-    })();
-  </script>
+  	   // Init
+  	   updateKpis();
+  	   drawChart();
+    })();
+  </script>
 </body>
 </html>
